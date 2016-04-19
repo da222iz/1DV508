@@ -15,6 +15,9 @@ import java.util.Properties;
 @Named
 @SessionScoped
 public class UserData implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+	
 	private static final String connection_url = "jdbc:mysql://localhost:3306/web_shopdb";
 
 	public List<User> getCharacters() {
