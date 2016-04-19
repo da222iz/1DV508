@@ -6,10 +6,23 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html">
 <h:head>
-<title>Title</title>
+<title>Administrator</title>
 </h:head>
 <h:body>
-<h:form>
-</h:form>
+	<h:form>
+		<h:dataTable value="#{userData.characters}" var="chr"
+			styleClass="characterTable"
+			headerClass="characterTableHeader"
+			rowClasses="characterTableOddRow,characterTableEvenRow">
+			<h:column>
+				<f:facet name="header">Username</f:facet>
+				#{chr.username}
+			</h:column>
+			<h:column>
+				<f:facet name="header">Password</f:facet>
+				#{chr.password}
+			</h:column>
+		</h:dataTable>		
+	</h:form>
 </h:body>
 </html>
