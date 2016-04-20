@@ -1,24 +1,31 @@
 package users;
 
-public class User {
-
+public class User{
+	
 	private String username;
 	private String password;
-	private String temp;
+	private int id;
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int theId) {
+		this.id = theId;
+	}
 	
 	public String getUsername() {
 		return username;
 	}
-	
-	public void setUsername(String username) {
-		this.username = username;
+	public void setUsername(String theusername) {
+		this.username = theusername;
 	}
-	
 	public String getPassword() {
 		return password;
 	}
-	
-	public void setPassword(String password) {
-		this.password = password;
+	public void setPassword(String thepassword) {
+		this.password = thepassword;
 	}
+	
+	
+
 }
