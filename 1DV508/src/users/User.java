@@ -6,6 +6,7 @@ public class User{
 	private String password;
 	private int id;	
 	
+	//random comment
 	public int getId() {
 		return id;
 	}
