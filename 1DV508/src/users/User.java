@@ -6,13 +6,13 @@ public class User{
 	private String password;
 	private int id;	
 	
-	private String LASTTEST;
+	
 	
 	public int getId() {
 		return id;
 	}
 	
-	//	setId
+	
 	public void setId(int theId) {
 		this.id = theId;
 	}
