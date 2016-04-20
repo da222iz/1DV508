@@ -7,6 +7,7 @@ public class User{
 	private int id;
 	private String temp;
 	private String CHANGE;
+	private String lol;
 	
 	public int getId() {
 		return id;
