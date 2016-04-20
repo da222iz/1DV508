@@ -5,13 +5,12 @@ public class User{
 	private String username;
 	private String password;
 	private int id;	
-	private int lol;
 	
 	public int getId() {
 		return id;
 	}
 	
-	//	setId afs ffasdf sda fsad fsad fsad fsad 
+	//	setId
 	public void setId(int theId) {
 		this.id = theId;
 	}
