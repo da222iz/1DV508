@@ -15,7 +15,7 @@ import javax.enterprise.context.SessionScoped;
 
 @Named
 @SessionScoped
-public class UserData implements Serializable {
+public class UserDB implements Serializable {
 	
 	private static final String connection_url = "jdbc:mysql://localhost:3306/web_shopdb";
 	private String message="";
