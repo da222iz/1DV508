@@ -5,7 +5,8 @@ public class User{
 	private String username;
 	private String password;
 	private int id;	
-	private String test; //test
+	
+	private String LASTTEST;
 	
 	public int getId() {
 		return id;
