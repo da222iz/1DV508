@@ -5,4 +5,5 @@ package users;
  * pd222dj@student.lnu.se
  */
 public class Test {
+	private String temp;
 }
