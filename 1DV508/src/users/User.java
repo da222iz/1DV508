@@ -4,12 +4,13 @@ public class User{
 	
 	private String username;
 	private String password;
-	private int id;
-	
+	private int id;	
 	
 	public int getId() {
 		return id;
 	}
+	
+	//	setId
 	public void setId(int theId) {
 		this.id = theId;
 	}
