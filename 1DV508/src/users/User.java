@@ -4,13 +4,9 @@ public class User{
 	
 	private String username;
 	private String password;
-<<<<<<< HEAD
-	private int id;
 	private int testForDavid;
-=======
 	private int id;	
 	private String test; //test
->>>>>>> origin/master
 	
 	public int getId() {
 		return id;
