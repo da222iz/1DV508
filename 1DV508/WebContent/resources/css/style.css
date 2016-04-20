@@ -1,0 +1,98 @@
+<style>
+.characterTable {
+	border-collapse: collapse;
+	border-bottom: 1px solid #000000;
+}
+
+.characterTableHeader {
+	text-align: center;
+	background: none repeat scroll 0 0 #B5B5B5;
+	border-bottom: 1px solid #000000;
+	border-top: 1px solid #000000;
+	padding: 2px;
+}
+
+.characterTableOddRow {
+	background: none repeat scroll 0 0 #FFFFFFF;
+}
+
+.characterTableEvenRow {
+	background: none repeat scroll 0 0 #D3D3FF;
+}
+
+.center {
+	margin: auto;
+	width: 60%;
+	padding: 10px;
+	font-weight: bold;
+	text-decoration: none;
+	font-size: xx-large;
+	font-style: normal;
+	text-align: center
+}
+.menue {
+	margin: auto;
+	width: 100%;
+	padding: 10px;
+	font-weight: bold;
+	text-decoration: none;
+	font-size: medium;
+	font-style: normal;
+	text-align: center
+}
+
+.message {
+	margin: auto;
+	width: 60%;
+	padding: 10px;
+	font-weight: normal;
+	text-decoration: none;
+	font-size: small;
+	font-style: normal;
+	text-align: center;
+	color: Red
+}
+
+.table {
+	margin: auto;
+	width: 60%;
+	padding: 10px;
+	font-weight: normal;
+	text-decoration: none;
+	font-size: medium;
+	font-style: normal;
+	text-align: center;
+	color: Black
+}
+
+ 
+ul#menu {
+    padding: 10;
+}
+
+ul#menu li {
+    display: inline;
+}
+
+ul#menu li a {
+    background-color: black;
+    color: white;
+    padding: 10px 40px;
+    text-decoration: none;
+    border-radius: 49px 0 49px 0;
+}
+
+ul#menu li a:hover {
+    background-color: dimgray;
+	
+	
+}
+
+a:hover
+{
+color:white;
+background-color: black;
+}
+
+
+</style>
