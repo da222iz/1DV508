@@ -1,15 +1,10 @@
 package users;
 
-/**
- * Useless Javadoc comment... test test
- */
-public class User{
+public class User {
 
 	private String username;
 	private String password;
 	private int id;
-
-
 
 	public int getId() {
 		return id;
