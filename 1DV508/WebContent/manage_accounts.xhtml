@@ -18,7 +18,7 @@
 			<li><a class="active" href="login.xhtml">PRODUCTS</a></li>
 			<li><a class="active" href="#contact">ORDERS</a></li>
 			<li><a class="active" href="manage_accounts.xhtml">ACCOUNTS</a></li>
-			<li><a class="active" href="#about">CATEGORIES</a></li>
+			<li><a class="active" href="manage_genres.xhtml">CATEGORIES</a></li>
 			<li><a class="active" href="index.xhtml">LOGOUT</a></li>
 		</ul>
 		</div>
@@ -31,20 +31,20 @@
 				rowClasses="characterTableOddRow,characterTableEvenRow">
 				<h:column>
 					<f:facet name="header">ID</f:facet>
-#{u.id}
-</h:column>
+					#{u.id}
+				</h:column>
 				<h:column>
 					<f:facet name="header">UserName</f:facet>
-#{u.username}
-</h:column>
+					#{u.username}
+				</h:column>
 				<h:column>
 					<f:facet name="header">delete</f:facet>
-<h:commandButton value="delete" action="#{userDB.delete(u)}" />
-</h:column>
+					<h:commandButton value="delete" rendered="#{not u.username.equals(userDB.loginUser.username)}" action="#{userDB.delete(u)}" />
+				</h:column>
 				<h:column>
 					<f:facet name="header">edit</f:facet>
-<h:commandButton value="edit" action="#{userDB.edit(u)}" />
-</h:column>
+					<h:commandButton value="edit" action="#{userDB.edit(u)}" />
+				</h:column>
 
 			</h:dataTable>
 		</div>
