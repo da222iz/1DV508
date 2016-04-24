@@ -2,6 +2,9 @@ package genres;
 
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
+
+import users.User;
+
 import java.io.Serializable;
 import java.sql.*;
 import java.util.ArrayList;
@@ -147,6 +150,13 @@ public class GenreDB implements Serializable
                 PreparedStatement stat = conn.prepareStatement(sql);
                 stat.setInt(1, temp.getId());
                 stat.executeUpdate();
+                
+                String sql1 = "ALTER TABLE web_shopdb.genres AUTO_INCREMENT = ?";
+				PreparedStatement stat1 = conn.prepareStatement(sql1);
+				List<Genre> result=getGenres();
+				int increment=result.get(result.size()-1).getId()+1;
+				stat1.setInt(1, increment);
+				stat1.executeUpdate();
 
             } finally {
                 conn.close();
