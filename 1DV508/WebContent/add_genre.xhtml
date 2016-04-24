@@ -15,7 +15,7 @@
         <div class="menue">
             <ul id="menu" >
                 <li><a class="active" href="login.xhtml">Home</a></li>
-                <li><a class="active" href="login.xhtml">PRODUCTS</a></li>
+                <li><a class="active" href="manage_movies.xhtml">PRODUCTS</a></li>
                 <li><a class="active" href="#contact">ORDERS</a></li>
                 <li><a class="active" href="manage_accounts.xhtml">ACCOUNTS</a></li>
                 <li><a class="active" href="manage_genres.xhtml">CATEGORIES</a></li>
@@ -26,7 +26,7 @@
             Add Genre
         </div>
         <div class="center">
-            Genre <h:inputText id="genre" value="#{genreDB.temp.genre}"/>
+            Genre <h:inputText id="genre" value="#{genreDB.temp.value}"/>
             <br />
             <h:commandButton value="save" action="#{genreDB.add()}"/>
         </div>

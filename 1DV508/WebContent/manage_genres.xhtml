@@ -8,14 +8,14 @@
       
 <h:head>
 	<h:outputStylesheet library="css" name="style.css" />
-	<title>add_account</title>
+	<title>manage_genres</title>
 </h:head>
  <h:body>     
     <h:form>
         <div class="menue">
             <ul id="menu" >
                 <li><a class="active" href="login.xhtml">Home</a></li>
-                <li><a class="active" href="login.xhtml">PRODUCTS</a></li>
+                <li><a class="active" href="manage_movies.xhtml">PRODUCTS</a></li>
                 <li><a class="active" href="#contact">ORDERS</a></li>
                 <li><a class="active" href="manage_accounts.xhtml">ACCOUNTS</a></li>
                 <li><a class="active" href="manage_genres.xhtml">CATEGORIES</a></li>
@@ -36,7 +36,7 @@
                 </h:column>
                 <h:column>
                     <f:facet name="header">Genre</f:facet>
-                    #{g.genre}
+                    #{g.value}
                 </h:column>
                 <h:column>
                     <f:facet name="header">edit</f:facet>
