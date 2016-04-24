@@ -27,11 +27,7 @@ public class UserDB implements Serializable {
 	public String add(){
 		
 		try {
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
-			Properties user = new Properties();
-			user.put("user", "group1");
-			user.put("password", "UltrabookGroup1!");
-			Connection conn = DriverManager.getConnection(connection_url, user);
+			Connection conn = newConnection();
 			try {
 				String sql = "INSERT INTO users (Username, Password) VALUES (?, ?)";
 				PreparedStatement stat = conn.prepareStatement(sql);
@@ -60,11 +56,7 @@ public class UserDB implements Serializable {
 		temp=x;
 		
 		try {
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
-			Properties user = new Properties();
-			user.put("user", "group1");
-			user.put("password", "UltrabookGroup1!");
-			Connection conn = DriverManager.getConnection(connection_url, user);
+			Connection conn = newConnection();
 			try {
 				String sql = "DELETE FROM users WHERE id = ?";
 				PreparedStatement stat = conn.prepareStatement(sql);
@@ -102,11 +94,7 @@ public class UserDB implements Serializable {
 	
 	public String save(){
 		try {
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
-			Properties user = new Properties();
-			user.put("user", "group1");
-			user.put("password", "UltrabookGroup1!");
-			Connection conn = DriverManager.getConnection(connection_url, user);
+			Connection conn = newConnection();
 			try {
 				String sql = "UPDATE users SET Username = ?, Password = ? WHERE id = ?";
 				PreparedStatement stat = conn.prepareStatement(sql);
@@ -159,11 +147,7 @@ public class UserDB implements Serializable {
 		List<User> result = new ArrayList<>();
 
 		try {
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
-			Properties user = new Properties();
-			user.put("user", "group1");
-			user.put("password", "UltrabookGroup1!");
-			Connection conn = DriverManager.getConnection(connection_url, user);
+			Connection conn = newConnection();
 			try {
 				String sql = "select * from web_shopdb.users";
 				PreparedStatement stat = conn.prepareStatement(sql);
@@ -208,6 +192,17 @@ public class UserDB implements Serializable {
 
 	public void setLoginUser(User theloginUser) {
 		this.loginUser = theloginUser;
+	}
+	private Connection newConnection()
+			throws SQLException, ClassNotFoundException, IllegalAccessException, InstantiationException {
+
+		Class.forName("com.mysql.jdbc.Driver").newInstance();
+		Properties user = new Properties();
+		user.put("user", "group1");
+		user.put("password", "UltrabookGroup1!");
+		Connection conn = DriverManager.getConnection(connection_url, user);
+
+		return conn;
 	}
 
 }
