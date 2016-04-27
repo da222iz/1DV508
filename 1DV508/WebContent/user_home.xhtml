@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+<h:head>
+
+
+<h:outputStylesheet library="css" name="userStyle.css" />
+<title>Home</title>
+</h:head>
+<h:body>
+<h:form>
+
+
+<div id="nav">
+<ul>
+  <li><a class="active" href="">Home</a></li>
+  <li class="dropdown">
+    <a href="#" class="dropbtn">Movies</a>
+    <div class="dropdown-content">
+    
+           <div >
+            <h:dataTable value="#{genreDB.genres}" var="genre" >
+                         
+       				<h:column>
+                   <a href="#{genreDB.getGenrePage(genre.value)}">#{genre.value}</a> 
+                    </h:column>
+               
+         </h:dataTable>
+        </div>
+        </div>
+  </li>
+  <li><a href="#">Cart</a></li>
+  <li><a href="#">Search</a></li>
+  <h:inputText value="" style=" height : 39px; width : 219px; float:left; position: relative;"/>
+  <li><a href="#">Support</a></li>
+</ul>
+ </div>
+
+        <div class="table center">
+            <h:dataTable value="#{movieDB.movies}" var="m" >
+                <h:column>
+                    <a target="_blank" href="#{m.imgPath}">
+                    <img src="#{m.imgPath}" alt="#{m.title}"/>
+                    </a>
+                </h:column>
+                <h:column>
+                <a target="_blank" href="movie_overview.xhtml" >
+    			<img src="#{m.imgPath}" alt="#{m.title}"/>
+  				</a>
+                </h:column>
+                <h:column>
+                    <a target="_blank" href="movie_overview.xhtml">
+                   <img src="#{m.imgPath}" alt="#{m.title}"/>
+                       </a>
+                </h:column>
+                <h:column>
+                   <a target="_blank" href="movie_overview.xhtml">
+                  <img src="#{m.imgPath}" alt="#{m.title}"/>
+                      </a>
+                </h:column>
+                <h:column>
+                   <a target="_blank" href="movie_overview.xhtml">
+                   <img src="#{m.imgPath}" alt="#{m.title}"/>
+                       </a>
+                </h:column>
+                
+            </h:dataTable>
+        </div>
+</h:form>
+</h:body>
+</html>
