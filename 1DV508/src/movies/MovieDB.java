@@ -10,6 +10,7 @@ import java.util.List;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 
+import genres.Genre;
 import resources.MySQLConnection; // MySQLConnection.java
 
 
@@ -21,6 +22,8 @@ public class MovieDB implements Serializable{
 	private MySQLConnection mysql = new MySQLConnection();
 	
 	private Movie temp = new Movie();
+	private String searchInput="";
+	private List<Movie> searchResult = this.getMovies();
 	
 	public Movie getTemp() {
 		return temp;
@@ -29,11 +32,114 @@ public class MovieDB implements Serializable{
 		this.temp = temp;
 	}
 	
+	public String displayMovieDetails(Movie m){
+		temp=m;
+		return "movie_details";
+	}
+	public String displayAllMovies(){
+		
+		this.searchResult = this.getMovies();
+		
+		return "user_home";
+	}
+	public String displayGenreMovies(Genre thegenre){
+		
+		this.searchResult = this.getGenreMovies(thegenre);
+		
+		return "user_home";
+	}
+	public String displaySearchResults(){
+		
+		this.searchResult = this.getSearchInMovies();
+		
+		return "user_home";
+	}
+	
 	/**
 	 * Returns a list with all available movies
 	 * 
 	 * @return a list with all available movies
 	 */
+	public List<Movie> getSearchInMovies(){
+		List<Movie> result = new ArrayList<>();
+		
+		try {
+			//	 database.
+			PreparedStatement stat = mysql.conn().prepareStatement(" SELECT * FROM web_shopdb.movies WHERE title LIKE ? OR description LIKE ? ");
+
+			try {
+				stat.setString(1, "%"+this.getSearchInput()+"%");
+				stat.setString(2, "%"+this.getSearchInput()+"%");
+				stat.execute();
+				ResultSet rs = stat.getResultSet();
+				while (rs.next()) {
+					Movie m = new Movie();
+					m.setId(rs.getInt(1));
+					m.setTitle(rs.getString(2));
+					m.setGenre(rs.getString(3));
+					m.setDescription(rs.getString(4));
+					m.setImgPath(rs.getString(5));
+					m.setQuantity(rs.getInt(6));
+					m.setPrice(rs.getFloat(7));
+					result.add(m);
+				}
+
+			} finally {
+				//	Close SQL connection.
+				stat.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return result;
+		
+	}
+	
+	public List<Movie> getGenreMovies(Genre genre){
+		List<Movie> result = new ArrayList<>();
+
+		try {
+
+			PreparedStatement stat = mysql.conn().prepareStatement(" SELECT * FROM web_shopdb.movies WHERE genre = ? ");
+
+			try {
+				stat.setString(1, genre.getValue());
+				stat.execute();
+				ResultSet rs = stat.getResultSet();
+				while (rs.next()) {
+					Movie m = new Movie();
+					m.setId(rs.getInt(1));
+					m.setTitle(rs.getString(2));
+					m.setGenre(rs.getString(3));
+					m.setDescription(rs.getString(4));
+					m.setImgPath(rs.getString(5));
+					m.setQuantity(rs.getInt(6));
+					m.setPrice(rs.getFloat(7));
+					result.add(m);
+				}
+
+			} finally {
+				stat.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return result;
+		
+	}
+	
 	public List<Movie> getMovies() {
 		List<Movie> result = new ArrayList<>();
 
@@ -179,5 +285,18 @@ public class MovieDB implements Serializable{
 		}
 
 		return "manage_movies";
+	}
+	
+	public String getSearchInput() {
+		return searchInput;
+	}
+	public void setSearchInput(String searchInput) {
+		this.searchInput = searchInput;
+	}
+	public List<Movie> getSearchResult() {
+		return searchResult;
+	}
+	public void setSearchResult(List<Movie> searchResult) {
+		this.searchResult = searchResult;
 	}
 }
