@@ -17,58 +17,37 @@
 
 <div id="nav">
 <ul>
-  <li><a class="active" href="">Home</a></li>
+  <li><a class="active" href="user_home.xhtml">Home</a></li>
   <li class="dropdown">
-    <a href="#" class="dropbtn">Movies</a>
+  <h:commandLink id="Movies" class="dropbtn" value="Movies" action="#{movieDB.displayAllMovies()}" />
     <div class="dropdown-content">
     
            <div >
             <h:dataTable value="#{genreDB.genres}" var="genre" >
                          
        				<h:column>
-                   <a href="#">#{genre.value}</a> 
+       				<h:commandLink id="genrelink" value="#{genre.value}" action="#{movieDB.displayGenreMovies(genre)}" />
                     </h:column>
                
          </h:dataTable>
         </div>
         </div>
   </li>
-  <li><a href="#">Cart</a></li>
-  <li><a href="#">Search</a></li>
-  <h:inputText value="" style=" height : 39px; width : 219px; float:left; position: relative;"/>
+  <li><a href="my_cart.xhtml">Cart</a></li>
+  <li><h:commandLink id="searchlink" value="Search" action="#{movieDB.displaySearchResults()}" /></li>
+  <h:inputText value="#{movieDB.searchInput}" style=" height : 39px; width : 219px; float:left; position: relative;"/>
   <li><a href="#">Support</a></li>
 </ul>
  </div>
-
+ 		
         <div class="table center">
-            <h:dataTable value="#{movieDB.movies}" var="m" >
-                <h:column>
-                    <a target="_blank" href="#{m.imgPath}">
-                    <img src="#{m.imgPath}" alt="#{m.title}"/>
-                    </a>
-                </h:column>
-                <h:column>
-                <a target="_blank" href="movie_overview.xhtml" >
-    			<img src="#{m.imgPath}" alt="#{m.title}"/>
-  				</a>
-                </h:column>
-                <h:column>
-                    <a target="_blank" href="movie_overview.xhtml">
-                   <img src="#{m.imgPath}" alt="#{m.title}"/>
-                       </a>
-                </h:column>
-                <h:column>
-                   <a target="_blank" href="movie_overview.xhtml">
-                  <img src="#{m.imgPath}" alt="#{m.title}"/>
-                      </a>
-                </h:column>
-                <h:column>
-                   <a target="_blank" href="movie_overview.xhtml">
-                   <img src="#{m.imgPath}" alt="#{m.title}"/>
-                       </a>
-                </h:column>
-                
-            </h:dataTable>
+        <h:panelGroup id="images">
+       	 	<ui:repeat value="#{movieDB.searchResult}" var="m">
+       	 		<h:commandLink action="#{movieDB.displayMovieDetails(m)}">
+        						<h:graphicImage name="#{m.imgPath}" alt="#{m.title}"/>
+				</h:commandLink>
+        	</ui:repeat>
+    	</h:panelGroup>
         </div>
 </h:form>
 </h:body>
