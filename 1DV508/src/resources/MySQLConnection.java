@@ -21,7 +21,7 @@ public class MySQLConnection {
 	 * @return Connection
 	 * 
 	 */
-	public Connection getMysql() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
+	public Connection conn() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.jdbc.Driver").newInstance();
 		
 		Properties user = new Properties();
