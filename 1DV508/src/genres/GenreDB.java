@@ -3,20 +3,24 @@ package genres;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 
+import resources.MySQLConnection; // MySQLConnection.java
+
 import java.io.Serializable;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 /**
  * Created by Peter Danielsson on 2016-04-22. pd222dj@student.lnu.se
  */
 
+@SuppressWarnings("serial")
 @Named
 @SessionScoped
 public class GenreDB implements Serializable {
-	private static final String connection_url = "jdbc:mysql://localhost:3306/web_shopdb";
+	//	MySQL Connection
+	private MySQLConnection mysql = new MySQLConnection();
+	
 	private Genre temp = new Genre();
 
 	public Genre getTemp() {
@@ -36,12 +40,10 @@ public class GenreDB implements Serializable {
 		List<Genre> result = new ArrayList<>();
 
 		try {
-
-			Connection conn = newConnection();
+			//	SQL query that retrieves all genres from database.
+			PreparedStatement stat = mysql.conn().prepareStatement("SELECT * FROM web_shopdb.genres");
 
 			try {
-				String sql = "SELECT * FROM web_shopdb.genres";
-				PreparedStatement stat = conn.prepareStatement(sql);
 				stat.execute();
 				ResultSet rs = stat.getResultSet();
 				while (rs.next()) {
@@ -50,9 +52,11 @@ public class GenreDB implements Serializable {
 					g.setValue(rs.getString(2));
 					result.add(g);
 				}
+				stat.close();
 
 			} finally {
-				conn.close();
+				//	Close SQL connection.
+				stat.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -89,15 +93,15 @@ public class GenreDB implements Serializable {
 	public String add() {
 
 		try {
-			Connection conn = newConnection();
+			//	SQL query that adds a genre to the database.
+			PreparedStatement stat = mysql.conn().prepareStatement("INSERT INTO web_shopdb.genres (genre) VALUES (?)");
 			try {
-				String sql = "INSERT INTO web_shopdb.genres (genre) VALUES (?)";
-				PreparedStatement stat = conn.prepareStatement(sql);
 				stat.setString(1, temp.getValue());
 				stat.executeUpdate();
 
 			} finally {
-				conn.close();
+				//	Close SQL connection.
+				stat.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -126,16 +130,16 @@ public class GenreDB implements Serializable {
 
 	public String save() {
 		try {
-			Connection conn = newConnection();
+			//	SQL query that updates one genre to the database by id.
+			PreparedStatement stat = mysql.conn().prepareStatement("UPDATE web_shopdb.genres SET genre = ? WHERE id = ?");
 			try {
-				String sql = "UPDATE web_shopdb.genres SET genre = ? WHERE id = ?";
-				PreparedStatement stat = conn.prepareStatement(sql);
 				stat.setString(1, temp.getValue());
 				stat.setInt(2, temp.getId());
 				stat.executeUpdate();
 
 			} finally {
-				conn.close();
+				//	Close SQL connection.
+				stat.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -154,22 +158,23 @@ public class GenreDB implements Serializable {
 		this.temp = genre;
 
 		try {
-			Connection conn = newConnection();
+			//	SQL query to delete a genre from the database by id.
+			PreparedStatement stat = mysql.conn().prepareStatement("DELETE FROM web_shopdb.genres WHERE id = ?");
+			//	SQL query to modify columns in an existing table.
+			PreparedStatement stat1 = mysql.conn().prepareStatement("ALTER TABLE web_shopdb.genres AUTO_INCREMENT = ?");
 			try {
-				String sql = "DELETE FROM web_shopdb.genres WHERE id = ?";
-				PreparedStatement stat = conn.prepareStatement(sql);
 				stat.setInt(1, temp.getId());
 				stat.executeUpdate();
 
-				String sql1 = "ALTER TABLE web_shopdb.genres AUTO_INCREMENT = ?";
-				PreparedStatement stat1 = conn.prepareStatement(sql1);
 				List<Genre> result = getGenres();
 				int increment = result.get(result.size() - 1).getId() + 1;
 				stat1.setInt(1, increment);
 				stat1.executeUpdate();
 
 			} finally {
-				conn.close();
+				//	Closes SQL connections.
+				stat.close();
+				stat1.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -182,22 +187,5 @@ public class GenreDB implements Serializable {
 		}
 
 		return "manage_genres";
-	}
-
-	/**
-	 * Private help method to retrieve a new connection to the database
-	 * 
-	 * @return Connection to database
-	 */
-	private Connection newConnection()
-			throws SQLException, ClassNotFoundException, IllegalAccessException, InstantiationException {
-
-		Class.forName("com.mysql.jdbc.Driver").newInstance();
-		Properties user = new Properties();
-		user.put("user", "group1");
-		user.put("password", "UltrabookGroup1!");
-		Connection conn = DriverManager.getConnection(connection_url, user);
-
-		return conn;
 	}
 }

@@ -1,24 +1,29 @@
 package movies;
 
 import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 
+import genres.Genre;
+import resources.MySQLConnection; // MySQLConnection.java
 
+
+@SuppressWarnings("serial")
 @Named
 @SessionScoped
 public class MovieDB implements Serializable{
-	private static final String connection_url = "jdbc:mysql://localhost:3306/web_shopdb";
+	//	MySQL Connection
+	private MySQLConnection mysql = new MySQLConnection();
+	
 	private Movie temp = new Movie();
+	private String searchInput="";
+	private List<Movie> searchResult = this.getMovies();
 	
 	public Movie getTemp() {
 		return temp;
@@ -27,21 +32,44 @@ public class MovieDB implements Serializable{
 		this.temp = temp;
 	}
 	
+	public String displayMovieDetails(Movie m){
+		temp=m;
+		return "movie_details";
+	}
+	public String displayAllMovies(){
+		
+		this.searchResult = this.getMovies();
+		
+		return "user_home";
+	}
+	public String displayGenreMovies(Genre thegenre){
+		
+		this.searchResult = this.getGenreMovies(thegenre);
+		
+		return "user_home";
+	}
+	public String displaySearchResults(){
+		
+		this.searchResult = this.getSearchInMovies();
+		
+		return "user_home";
+	}
+	
 	/**
 	 * Returns a list with all available movies
 	 * 
 	 * @return a list with all available movies
 	 */
-	public List<Movie> getMovies() {
+	public List<Movie> getSearchInMovies(){
 		List<Movie> result = new ArrayList<>();
-
+		
 		try {
-
-			Connection conn = newConnection();
+			//	 database.
+			PreparedStatement stat = mysql.conn().prepareStatement(" SELECT * FROM web_shopdb.movies WHERE title LIKE ? OR description LIKE ? ");
 
 			try {
-				String sql = "SELECT * FROM web_shopdb.movies";
-				PreparedStatement stat = conn.prepareStatement(sql);
+				stat.setString(1, "%"+this.getSearchInput()+"%");
+				stat.setString(2, "%"+this.getSearchInput()+"%");
 				stat.execute();
 				ResultSet rs = stat.getResultSet();
 				while (rs.next()) {
@@ -57,7 +85,86 @@ public class MovieDB implements Serializable{
 				}
 
 			} finally {
-				conn.close();
+				//	Close SQL connection.
+				stat.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return result;
+		
+	}
+	
+	public List<Movie> getGenreMovies(Genre genre){
+		List<Movie> result = new ArrayList<>();
+
+		try {
+
+			PreparedStatement stat = mysql.conn().prepareStatement(" SELECT * FROM web_shopdb.movies WHERE genre = ? ");
+
+			try {
+				stat.setString(1, genre.getValue());
+				stat.execute();
+				ResultSet rs = stat.getResultSet();
+				while (rs.next()) {
+					Movie m = new Movie();
+					m.setId(rs.getInt(1));
+					m.setTitle(rs.getString(2));
+					m.setGenre(rs.getString(3));
+					m.setDescription(rs.getString(4));
+					m.setImgPath(rs.getString(5));
+					m.setQuantity(rs.getInt(6));
+					m.setPrice(rs.getFloat(7));
+					result.add(m);
+				}
+
+			} finally {
+				stat.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return result;
+		
+	}
+	
+	public List<Movie> getMovies() {
+		List<Movie> result = new ArrayList<>();
+
+		try {
+			//	SQL query that retrieves all movies from database.
+			PreparedStatement stat = mysql.conn().prepareStatement("SELECT * FROM web_shopdb.movies");
+
+			try {
+				stat.execute();
+				ResultSet rs = stat.getResultSet();
+				while (rs.next()) {
+					Movie m = new Movie();
+					m.setId(rs.getInt(1));
+					m.setTitle(rs.getString(2));
+					m.setGenre(rs.getString(3));
+					m.setDescription(rs.getString(4));
+					m.setImgPath(rs.getString(5));
+					m.setQuantity(rs.getInt(6));
+					m.setPrice(rs.getFloat(7));
+					result.add(m);
+				}
+
+			} finally {
+				//	Close SQL connection.
+				stat.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -79,10 +186,9 @@ public class MovieDB implements Serializable{
 	public String add() {
 
 		try {
-			Connection conn = newConnection();
+			//	SQL query that adds a movie to the database.
+			PreparedStatement stat = mysql.conn().prepareStatement("INSERT INTO web_shopdb.movies (title, genre, description, image_path, quantity, price) VALUES (?, ?, ?, ?, ?, ?)");
 			try {
-				String sql = "INSERT INTO web_shopdb.movies (title, genre, description, image_path, quantity, price) VALUES (?, ?, ?, ?, ?, ?)";
-				PreparedStatement stat = conn.prepareStatement(sql);
 				stat.setString(1, temp.getTitle());
 				stat.setString(2, temp.getGenre());
 				stat.setString(3, temp.getDescription());
@@ -92,7 +198,8 @@ public class MovieDB implements Serializable{
 				stat.executeUpdate();
 
 			} finally {
-				conn.close();
+				//	Close SQL connection.
+				stat.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -115,10 +222,9 @@ public class MovieDB implements Serializable{
 	
 	public String save(){
 		try {
-			Connection conn = newConnection();
+			//	SQL query that updates one movie to the database by id.
+			PreparedStatement stat = mysql.conn().prepareStatement("UPDATE web_shopdb.movies SET title = ?, genre = ?, description = ?, image_path = ?, quantity = ?, price = ?  WHERE id = ?");
 			try {
-				String sql = "UPDATE web_shopdb.movies SET title = ?, genre = ?, description = ?, image_path = ?, quantity = ?, price = ?  WHERE id = ?";
-				PreparedStatement stat = conn.prepareStatement(sql);
 				stat.setString(1, temp.getTitle());
 				stat.setString(2, temp.getGenre());
 				stat.setString(3, temp.getDescription());
@@ -129,7 +235,8 @@ public class MovieDB implements Serializable{
 				stat.executeUpdate();
 				
 			} finally {
-				conn.close();
+				//	Close SQL connection.
+				stat.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -149,22 +256,23 @@ public class MovieDB implements Serializable{
 		this.temp = x;
 
 		try {
-			Connection conn = newConnection();
+			//	SQL query to delete a movie from the database by id.
+			PreparedStatement stat = mysql.conn().prepareStatement("DELETE FROM web_shopdb.movies WHERE id = ?");
+			//	SQL query to modify columns in an existing table.
+			PreparedStatement stat1 = mysql.conn().prepareStatement("ALTER TABLE web_shopdb.movies AUTO_INCREMENT = ?");
 			try {
-				String sql = "DELETE FROM web_shopdb.movies WHERE id = ?";
-				PreparedStatement stat = conn.prepareStatement(sql);
 				stat.setInt(1, temp.getId());
 				stat.executeUpdate();
-
-				String sql1 = "ALTER TABLE web_shopdb.movies AUTO_INCREMENT = ?";
-				PreparedStatement stat1 = conn.prepareStatement(sql1);
+				
 				List<Movie> result = getMovies();
 				int increment = result.get(result.size() - 1).getId() + 1;
 				stat1.setInt(1, increment);
 				stat1.executeUpdate();
 
 			} finally {
-				conn.close();
+				//	Closes SQL connections.
+				stat.close();
+				stat1.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -179,18 +287,16 @@ public class MovieDB implements Serializable{
 		return "manage_movies";
 	}
 	
-	
-	private Connection newConnection()
-			throws SQLException, ClassNotFoundException, IllegalAccessException, InstantiationException {
-
-		Class.forName("com.mysql.jdbc.Driver").newInstance();
-		Properties user = new Properties();
-		user.put("user", "group1");
-		user.put("password", "UltrabookGroup1!");
-		Connection conn = DriverManager.getConnection(connection_url, user);
-
-		return conn;
+	public String getSearchInput() {
+		return searchInput;
 	}
-	
-
+	public void setSearchInput(String searchInput) {
+		this.searchInput = searchInput;
+	}
+	public List<Movie> getSearchResult() {
+		return searchResult;
+	}
+	public void setSearchResult(List<Movie> searchResult) {
+		this.searchResult = searchResult;
+	}
 }
