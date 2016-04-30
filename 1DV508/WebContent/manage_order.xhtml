@@ -4,7 +4,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://java.sun.com/jsf/core">
 <h:head>
 <h:outputStylesheet library="css" name="style.css" />
 <title>manage_order</title>
@@ -31,28 +32,31 @@
 				rowClasses="characterTableOddRow,characterTableEvenRow">
 				<h:column>
 					<f:facet name="header">Order Number</f:facet>
-					#{ord.orderNumber}
+					#{ord.id}
 				</h:column>
 			
 				<h:column>
-					<f:facet name="header">Quantity</f:facet>
-					#{ord.quantity}
+					<f:facet name="header">Name</f:facet>
+					#{ord.name}
 				</h:column>
 				<h:column>
 					<f:facet name="header">Status</f:facet>
-				 <h:selectOneMenu id="menu" immediate="true" value="#{orderDB.temp.status}">
-		<f:selectItems value="#{orderDB.order}" />
+				 <h:selectOneMenu id="menu" immediate="true" value="#{orderDB.allOrders.get(orderDB.indexOfOrder(ord)).status}">
+				 <f:selectItems value="#{orderDB.statusArray()}"/>
 		</h:selectOneMenu>
 				</h:column>
-				
 				<h:column>
-				<h:commandButton value="Submit" action="#{orderDB.updateStatus(ord)}" />
+				<h:commandButton value="delete" action="#{orderDB.delete(ord)}" />
 					
 				</h:column>
 				
 
 			</h:dataTable>
+			<br />
+			<h:commandButton value="Submit Changes" action="#{orderDB.updateStatus()}" />
+			<br />
 		</div>
+				
 		
 		
 		
