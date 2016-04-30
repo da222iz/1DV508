@@ -1,17 +1,13 @@
 package orders;
 
-import movies.Movie;
-
 public class Order {
 	
-	private int orderNumber;
 	private String name;
 	private String address;
 	private String zip;
 	private String cityName;
 	private String phone;
 	private String email;
-	private int quantity;
 	private String status;
 	private int id;
 
@@ -21,12 +17,6 @@ public class Order {
 	}
 	public void setId(int id) {
 		this.id = id;
-	}
-	public int getOrderNumber() {
-		return orderNumber;
-	}
-	public void setOrderNumber(int orderNumber) {
-		this.orderNumber = orderNumber;
 	}
 	public String getName() {
 		return name;
@@ -63,12 +53,6 @@ public class Order {
 	}
 	public void setEmail(String email) {
 		this.email = email;
-	}
-	public int getQuantity() {
-		return quantity;
-	}
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
 	}
 	public String getStatus() {
 		return status;

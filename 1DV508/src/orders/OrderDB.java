@@ -9,9 +9,6 @@ import java.util.List;
 
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
-
-import genres.Genre;
-import movies.Movie;
 import resources.MySQLConnection;
 
 @SuppressWarnings("serial")
@@ -20,44 +17,53 @@ import resources.MySQLConnection;
 public class OrderDB implements Serializable {
 	//	MySQL Connection
 	private MySQLConnection mysql = new MySQLConnection();
+	
+	private List<Order> allOrders=getOrder();
 
-	private Order temp = new Order();
-
-	public Order getTemp() {
-		return temp;
-	}
-
-	public void setTemp(Order temp) {
-		this.temp = temp;
-	}
 	
 	
- public List <String> statusList(){
-		List<String> list = new ArrayList<>();
-		list.add("New Item");
-		list.add("Waiting");
-		list.add("Shiped");
+	public String[]  statusArray(){
+		String[] status=new String[3];
+		status[0]="NEW";
+		status[1]="SHIPPED";
+		status[2]="DELAYED";
 		
-		return list;	
+		return status;	
 		
 		
 	}
- 
- public void updateStatus(Order ord) {
-	 
-this.temp=ord;
+	public int indexOfOrder(Order x){
+		int id=x.getId();
+		int result=-1;
+		for (int i=0; i<allOrders.size(); i++){
+			if (allOrders.get(i).getId()==id){
+				result=i;
+				break;
+			}
+		}
+		return result;
+	}
+	
+	public String delete(Order x) {
+
 		try {
-			//	SQL query that adds a movie to the database.
-			PreparedStatement stat = mysql.conn().prepareStatement("UPDATE orders SET status = ? WHERE id = ?");
+			//	SQL query to delete a movie from the database by id.
+			PreparedStatement stat = mysql.conn().prepareStatement("DELETE FROM web_shopdb.orders WHERE order_id = ?");
+			//	SQL query to modify columns in an existing table.
+			PreparedStatement stat1 = mysql.conn().prepareStatement("ALTER TABLE web_shopdb.orders AUTO_INCREMENT = ?");
 			try {
-				stat.setString(2, temp.getStatus());
-				stat.setInt(1, temp.getId());
-				
+				stat.setInt(1, x.getId());
 				stat.executeUpdate();
+				
+				List<Order> result = getOrder();
+				int increment = result.get(result.size() - 1).getId() + 1;
+				stat1.setInt(1, increment);
+				stat1.executeUpdate();
 
 			} finally {
-				//	Close SQL connection.
+				//	Closes SQL connections.
 				stat.close();
+				stat1.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -69,7 +75,36 @@ this.temp=ord;
 			e.printStackTrace();
 		}
 
-		
+		return "manage_order";
+	}
+ 
+ 	public String updateStatus() {
+ 			for(int i=0; i<allOrders.size(); i++){
+ 				
+ 				try {
+ 					//	SQL query that adds a movie to the database.
+ 					PreparedStatement stat = mysql.conn().prepareStatement(" UPDATE web_shopdb.orders SET status = ? WHERE order_id = ? ");
+ 					try {
+ 						stat.setString(1, allOrders.get(i).getStatus());
+ 						stat.setInt(2, allOrders.get(i).getId());
+ 						
+ 						stat.executeUpdate();
+
+ 					} finally {
+ 						//	Close SQL connection.
+ 						stat.close();
+ 					}
+ 				} catch (SQLException e) {
+ 					e.printStackTrace();
+ 				} catch (InstantiationException e) {
+ 					e.printStackTrace();
+ 				} catch (IllegalAccessException e) {
+ 					e.printStackTrace();
+ 				} catch (ClassNotFoundException e) {
+ 					e.printStackTrace();
+ 				}
+ 			}
+		return "manage_order";
 	}
 
 	public List<Order> getOrder() {
@@ -84,9 +119,9 @@ this.temp=ord;
 				ResultSet rs = stat.getResultSet();
 				while (rs.next()) {
 					Order m = new Order();
-					m.setOrderNumber(rs.getInt(4));
+					m.setId(rs.getInt(1));
 					m.setStatus(rs.getString(2));
-					m.setQuantity(rs.getInt(3));
+					m.setName(rs.getString(3));
 					result.add(m);
 					
 				}
@@ -105,5 +140,13 @@ this.temp=ord;
 			e.printStackTrace();
 		}
 		return result;
+	}
+
+	public List<Order> getAllOrders() {
+		return allOrders;
+	}
+
+	public void setAllOrders(List<Order> allOrders) {
+		this.allOrders = allOrders;
 	}
 }
