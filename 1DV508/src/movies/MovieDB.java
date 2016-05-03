@@ -1,5 +1,9 @@
 package movies;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,6 +13,9 @@ import java.util.List;
 
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
+
+import org.apache.commons.io.FilenameUtils;
+import org.primefaces.model.UploadedFile;
 
 import genres.Genre;
 import resources.MySQLConnection; // MySQLConnection.java
@@ -22,15 +29,28 @@ public class MovieDB implements Serializable{
 	private MySQLConnection mysql = new MySQLConnection();
 	
 	private Movie temp = new Movie();
+	private UploadedFile image;
+	private String filename;
 	private String searchInput="";
 	private List<Movie> searchResult = this.getMovies();
 	
+	// Getters and Setters for Movie
 	public Movie getTemp() {
 		return temp;
 	}
 	public void setTemp(Movie temp) {
 		this.temp = temp;
 	}
+    
+	// Getters and Setters for image
+    public UploadedFile getImage() {
+		return image;
+	}
+    
+	public void setImage(UploadedFile image) {
+		this.image = image;
+	}
+	
 	
 	public String displayMovieDetails(Movie m){
 		temp=m;
@@ -182,9 +202,12 @@ public class MovieDB implements Serializable{
 	 * Adds a new movie to the database
 	 * 
 	 * @return return page url
+	 * @throws IOException 
 	 */
-	public String add() {
-
+	public String add() throws IOException {
+		//	Image upload to the local resources/images/	
+		uploadImage();
+		
 		try {
 			//	SQL query that adds a movie to the database.
 			PreparedStatement stat = mysql.conn().prepareStatement("INSERT INTO web_shopdb.movies (title, genre, description, image_path, quantity, price) VALUES (?, ?, ?, ?, ?, ?)");
@@ -192,7 +215,7 @@ public class MovieDB implements Serializable{
 				stat.setString(1, temp.getTitle());
 				stat.setString(2, temp.getGenre());
 				stat.setString(3, temp.getDescription());
-				stat.setString(4, temp.getImgPath());
+				stat.setString(4, "images/" + filename);
 				stat.setInt(5, temp.getQuantity());
 				stat.setFloat(6, temp.getPrice());
 				stat.executeUpdate();
@@ -220,7 +243,17 @@ public class MovieDB implements Serializable{
 		return "edit_movie";
 	}
 	
-	public String save(){
+	public String save() throws IOException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException{
+		//	The object will find the path to the film's poster.
+		SelectImage image = new SelectImage(this.temp.getId());
+		
+		//	When the path to the image is treated as a file, then you can delete it from the server.
+		File file = new File(image.getImgPath());	
+		file.delete();
+		
+		//	Image upload to the local resources/images/	
+		uploadImage();
+	        
 		try {
 			//	SQL query that updates one movie to the database by id.
 			PreparedStatement stat = mysql.conn().prepareStatement("UPDATE web_shopdb.movies SET title = ?, genre = ?, description = ?, image_path = ?, quantity = ?, price = ?  WHERE id = ?");
@@ -228,7 +261,7 @@ public class MovieDB implements Serializable{
 				stat.setString(1, temp.getTitle());
 				stat.setString(2, temp.getGenre());
 				stat.setString(3, temp.getDescription());
-				stat.setString(4, temp.getImgPath());
+				stat.setString(4, "images/" + filename);
 				stat.setInt(5, temp.getQuantity());
 				stat.setFloat(6, temp.getPrice());
 				stat.setInt(7, temp.getId());
@@ -252,8 +285,15 @@ public class MovieDB implements Serializable{
 		
 	}
 	
-	public String delete(Movie x) {
+	public String delete(Movie x) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		this.temp = x;
+		
+		//	The object will find the path to the film's poster.
+		SelectImage image = new SelectImage(this.temp.getId());
+		
+		//	When the path to the image is treated as a file, then you can delete it from the server.
+		File file = new File(image.getImgPath());	
+		file.delete();
 
 		try {
 			//	SQL query to delete a movie from the database by id.
@@ -298,5 +338,59 @@ public class MovieDB implements Serializable{
 	}
 	public void setSearchResult(List<Movie> searchResult) {
 		this.searchResult = searchResult;
+	}
+	
+	
+	/**
+	 * This java method will upload the image file to the local repository.
+	 * 
+	 * @throws IOException
+	 */
+	public void uploadImage() throws IOException {
+		//	Link to the local repository
+		String filePath=System.getProperty("user.home") + "/git/1DV508/1DV508/WebContent/resources/images/";
+				
+		//	Image upload to the local resources/images/			
+        if (null!=image) {
+        	byte[] bytes = image.getContents();
+            filename = FilenameUtils.getName(image.getFileName());
+            BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(filePath+filename)));
+            stream.write(bytes);
+            stream.close();
+        }
+	}
+	
+	/**
+	 * Class retrieves image from database by id.
+	 */
+	private class SelectImage {
+		private PreparedStatement stat;
+		private ResultSet rs;
+		private String imgPath;
+		
+		/**
+		 * @param id
+		 * @throws InstantiationException
+		 * @throws IllegalAccessException
+		 * @throws ClassNotFoundException
+		 * @throws SQLException
+		 */
+		public SelectImage(int id) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
+			this.stat = mysql.conn().prepareStatement("SELECT * FROM web_shopdb.movies WHERE id = '"+id+"'");
+			stat.execute();
+			
+			rs = stat.getResultSet();
+			
+			while (rs.next()) {
+				imgPath = rs.getString(5);
+			}
+		}
+		
+		/**
+		 * @return path
+		 */
+		public String getImgPath() {
+			return System.getProperty("user.home") + "/git/1DV508/1DV508/WebContent/resources/" + imgPath;
+		}
 	}
 }
