@@ -9,7 +9,7 @@
 
 
 <h:outputStylesheet library="css" name="userStyle.css" />
-<title>Home</title>
+<title>User Information</title>
 </h:head>
 <h:body>
 <h:form>
@@ -56,18 +56,37 @@
 					<f:facet name="header">Unit Price</f:facet>
 					#{cartmovie.price}
 				</h:column>
-				<h:column>
-                    <f:facet name="header">Delete</f:facet>
-                    <h:commandButton value="delete" action="#{cart.delete(cartmovie)}" />
-                </h:column>
+				
 
 			</h:dataTable>
 		</div>
         </div>
-        
-         <h:commandButton value="Check Out" action="user_info" />
-          <h:commandButton value="Continue Shopping" action="user_home" />
-           <h:commandButton value="Empty Card" action="#{cart.emptyCart()}" />
+        <div class="center">
+			User Information
+		</div>
+		
+	<div class="center">
+Name <h:inputText id="name" value="#{cart.temp.name}" />
+		<br />
+		Address <h:inputText id="address" value="#{cart.temp.address}" />
+		<br />
+ZIP		 <h:inputText id="zip" value="#{cart.temp.zip}" />
+		<br />
+City <h:inputText id="city" value="#{cart.temp.cityName}" />
+		<br />
+Phone number <h:inputText id="phone" value="#{cart.temp.phone}" />
+		<br />
+Email <h:inputText id="email" value="#{cart.temp.email}" />
+		<br />
+
+		<h:commandButton id="place" value="Place Order" action="#{cart.placeOrder()}" >
+		
+<f:ajax execute="place" render="theGreeting" />
+</h:commandButton>
+
+		<br />
+		<h:outputText id="theGreeting" value="#{cart.placeOrder()}" />
+</div>     
 </h:form>
 </h:body>
 </html>
