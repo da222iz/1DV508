@@ -29,8 +29,7 @@ public class MovieDB implements Serializable{
 	private MySQLConnection mysql = new MySQLConnection();
 	
 	private Movie temp = new Movie();
-	private UploadedFile image;
-	private String filename;
+	private UploadedFile image=null;
 	private String searchInput="";
 	private List<Movie> searchResult = this.getMovies();
 	
@@ -204,7 +203,7 @@ public class MovieDB implements Serializable{
 	 * @return return page url
 	 * @throws IOException 
 	 */
-	public String add() throws IOException {
+	public String add(){
 		//	Image upload to the local resources/images/	
 		uploadImage();
 		
@@ -215,7 +214,7 @@ public class MovieDB implements Serializable{
 				stat.setString(1, temp.getTitle());
 				stat.setString(2, temp.getGenre());
 				stat.setString(3, temp.getDescription());
-				stat.setString(4, "images/" + filename);
+				stat.setString(4, temp.getImgPath());
 				stat.setInt(5, temp.getQuantity());
 				stat.setFloat(6, temp.getPrice());
 				stat.executeUpdate();
@@ -233,6 +232,8 @@ public class MovieDB implements Serializable{
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
+		this.setTemp(null);
+		this.setImage(null);
 
 		return "manage_movies";
 	}
@@ -240,19 +241,65 @@ public class MovieDB implements Serializable{
 	
 	public String edit(Movie m) {
 		this.temp = m;
+		this.setImage(null);
 		return "edit_movie";
 	}
 	
-	public String save() throws IOException, InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException{
-		//	The object will find the path to the film's poster.
-		SelectImage image = new SelectImage(this.temp.getId());
+	public List<Movie> getImageDuplicates(String path){
+		List<Movie> result = new ArrayList<>();
+
+		try {
+
+			PreparedStatement stat = mysql.conn().prepareStatement(" SELECT * FROM web_shopdb.movies WHERE image_path = ? ");
+
+			try {
+				stat.setString(1, path);
+				stat.execute();
+				ResultSet rs = stat.getResultSet();
+				while (rs.next()) {
+					Movie m = new Movie();
+					m.setId(rs.getInt(1));
+					m.setTitle(rs.getString(2));
+					m.setGenre(rs.getString(3));
+					m.setDescription(rs.getString(4));
+					m.setImgPath(rs.getString(5));
+					m.setQuantity(rs.getInt(6));
+					m.setPrice(rs.getFloat(7));
+					result.add(m);
+				}
+
+			} finally {
+				stat.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return result;
 		
-		//	When the path to the image is treated as a file, then you can delete it from the server.
-		File file = new File(image.getImgPath());	
-		file.delete();
-		
-		//	Image upload to the local resources/images/	
-		uploadImage();
+	}
+	
+	public String save(){
+		if(!(this.image.getFileName().equals(""))){
+			//	The object will find the path to the film's poster.
+			String tempPath = System.getProperty("user.home") + "/git/1DV508/1DV508/WebContent/resources/" +this.temp.getImgPath();
+			
+			List<Movie> imageDuplicates=this.getImageDuplicates(this.temp.getImgPath());
+			
+			//	When the path to the image is treated as a file, then you can delete it from the server.
+			if(imageDuplicates.size()<=1){
+				File file = new File(tempPath);	
+				file.delete();
+			}
+			
+			//	Image upload to the local resources/images/	
+			uploadImage();
+		}
 	        
 		try {
 			//	SQL query that updates one movie to the database by id.
@@ -261,7 +308,7 @@ public class MovieDB implements Serializable{
 				stat.setString(1, temp.getTitle());
 				stat.setString(2, temp.getGenre());
 				stat.setString(3, temp.getDescription());
-				stat.setString(4, "images/" + filename);
+				stat.setString(4, temp.getImgPath());
 				stat.setInt(5, temp.getQuantity());
 				stat.setFloat(6, temp.getPrice());
 				stat.setInt(7, temp.getId());
@@ -289,11 +336,15 @@ public class MovieDB implements Serializable{
 		this.temp = x;
 		
 		//	The object will find the path to the film's poster.
-		SelectImage image = new SelectImage(this.temp.getId());
+		String tempPath = System.getProperty("user.home")+"/git/1DV508/1DV508/WebContent/resources/"+this.temp.getImgPath();
+		
+		List<Movie> imageDuplicates=this.getImageDuplicates(this.temp.getImgPath());
 		
 		//	When the path to the image is treated as a file, then you can delete it from the server.
-		File file = new File(image.getImgPath());	
-		file.delete();
+		if(imageDuplicates.size()<=1){
+			File file = new File(tempPath);	
+			file.delete();
+		}
 
 		try {
 			//	SQL query to delete a movie from the database by id.
@@ -346,51 +397,23 @@ public class MovieDB implements Serializable{
 	 * 
 	 * @throws IOException
 	 */
-	public void uploadImage() throws IOException {
-		//	Link to the local repository
-		String filePath=System.getProperty("user.home") + "/git/1DV508/1DV508/WebContent/resources/images/";
-				
-		//	Image upload to the local resources/images/			
-        if (null!=image) {
-        	byte[] bytes = image.getContents();
-            filename = FilenameUtils.getName(image.getFileName());
-            BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(filePath+filename)));
-            stream.write(bytes);
-            stream.close();
-        }
-	}
-	
-	/**
-	 * Class retrieves image from database by id.
-	 */
-	private class SelectImage {
-		private PreparedStatement stat;
-		private ResultSet rs;
-		private String imgPath;
-		
-		/**
-		 * @param id
-		 * @throws InstantiationException
-		 * @throws IllegalAccessException
-		 * @throws ClassNotFoundException
-		 * @throws SQLException
-		 */
-		public SelectImage(int id) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-			this.stat = mysql.conn().prepareStatement("SELECT * FROM web_shopdb.movies WHERE id = '"+id+"'");
-			stat.execute();
+	public void uploadImage(){
+		try{
+			//	Link to the local repository
+			String filePath=System.getProperty("user.home") + "/git/1DV508/1DV508/WebContent/resources/images/";
+					
+			//	Image upload to the local resources/images/			
+	        if (!(this.image.getFileName().equals(""))) {
+	        	byte[] bytes = image.getContents();
+	            String filename = FilenameUtils.getName(image.getFileName());
+	            BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(filePath+filename)));
+	            stream.write(bytes);
+	            stream.close();
+	            this.getTemp().setImgPath("images/" + filename);
+	        }
 			
-			rs = stat.getResultSet();
-			
-			while (rs.next()) {
-				imgPath = rs.getString(5);
-			}
 		}
-		
-		/**
-		 * @return path
-		 */
-		public String getImgPath() {
-			return System.getProperty("user.home") + "/git/1DV508/1DV508/WebContent/resources/" + imgPath;
+		catch(Exception e){	
 		}
-	}
+	}	
 }
