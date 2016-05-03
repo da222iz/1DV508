@@ -245,14 +245,57 @@ public class MovieDB implements Serializable{
 		return "edit_movie";
 	}
 	
+	public List<Movie> getImageDuplicates(String path){
+		List<Movie> result = new ArrayList<>();
+
+		try {
+
+			PreparedStatement stat = mysql.conn().prepareStatement(" SELECT * FROM web_shopdb.movies WHERE image_path = ? ");
+
+			try {
+				stat.setString(1, path);
+				stat.execute();
+				ResultSet rs = stat.getResultSet();
+				while (rs.next()) {
+					Movie m = new Movie();
+					m.setId(rs.getInt(1));
+					m.setTitle(rs.getString(2));
+					m.setGenre(rs.getString(3));
+					m.setDescription(rs.getString(4));
+					m.setImgPath(rs.getString(5));
+					m.setQuantity(rs.getInt(6));
+					m.setPrice(rs.getFloat(7));
+					result.add(m);
+				}
+
+			} finally {
+				stat.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return result;
+		
+	}
+	
 	public String save(){
 		if(!(this.image.getFileName().equals(""))){
 			//	The object will find the path to the film's poster.
 			String tempPath = System.getProperty("user.home") + "/git/1DV508/1DV508/WebContent/resources/" +this.temp.getImgPath();
 			
+			List<Movie> imageDuplicates=this.getImageDuplicates(this.temp.getImgPath());
+			
 			//	When the path to the image is treated as a file, then you can delete it from the server.
-			File file = new File(tempPath);	
-			file.delete();
+			if(imageDuplicates.size()<=1){
+				File file = new File(tempPath);	
+				file.delete();
+			}
 			
 			//	Image upload to the local resources/images/	
 			uploadImage();
@@ -295,9 +338,13 @@ public class MovieDB implements Serializable{
 		//	The object will find the path to the film's poster.
 		String tempPath = System.getProperty("user.home")+"/git/1DV508/1DV508/WebContent/resources/"+this.temp.getImgPath();
 		
+		List<Movie> imageDuplicates=this.getImageDuplicates(this.temp.getImgPath());
+		
 		//	When the path to the image is treated as a file, then you can delete it from the server.
-		File file = new File(tempPath);	
-		file.delete();
+		if(imageDuplicates.size()<=1){
+			File file = new File(tempPath);	
+			file.delete();
+		}
 
 		try {
 			//	SQL query to delete a movie from the database by id.
