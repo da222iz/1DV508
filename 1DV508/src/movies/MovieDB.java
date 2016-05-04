@@ -28,8 +28,8 @@ public class MovieDB implements Serializable{
 	//	MySQL Connection
 	private MySQLConnection mysql = new MySQLConnection();
 	
-	private Movie temp = new Movie();
-	private UploadedFile image=null;
+	private Movie temp=new Movie();
+	private UploadedFile image;
 	private String searchInput="";
 	private List<Movie> searchResult = this.getMovies();
 	
@@ -196,6 +196,11 @@ public class MovieDB implements Serializable{
 		}
 		return result;
 	}
+	public String goToAdd(){
+		this.temp = new Movie();
+		this.setImage(null);
+		return "add_movie";
+	}
 	
 	/**
 	 * Adds a new movie to the database
@@ -204,8 +209,12 @@ public class MovieDB implements Serializable{
 	 * @throws IOException 
 	 */
 	public String add(){
+		
 		//	Image upload to the local resources/images/	
 		uploadImage();
+		if (this.temp.getImgPath()==null){
+			this.temp.setImgPath("images/not_available.jpg");
+		}
 		
 		try {
 			//	SQL query that adds a movie to the database.
@@ -232,8 +241,6 @@ public class MovieDB implements Serializable{
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		this.setTemp(null);
-		this.setImage(null);
 
 		return "manage_movies";
 	}
@@ -292,7 +299,7 @@ public class MovieDB implements Serializable{
 			List<Movie> imageDuplicates=this.getImageDuplicates(this.temp.getImgPath());
 			
 			//	When the path to the image is treated as a file, then you can delete it from the server.
-			if(imageDuplicates.size()<=1){
+			if(imageDuplicates.size()<=1 && !(this.temp.getImgPath().equals("images/not_available.jpg"))){
 				File file = new File(tempPath);	
 				file.delete();
 			}
@@ -341,7 +348,7 @@ public class MovieDB implements Serializable{
 		List<Movie> imageDuplicates=this.getImageDuplicates(this.temp.getImgPath());
 		
 		//	When the path to the image is treated as a file, then you can delete it from the server.
-		if(imageDuplicates.size()<=1){
+		if(imageDuplicates.size()<=1 && !(this.temp.getImgPath().equals("images/not_available.jpg"))){
 			File file = new File(tempPath);	
 			file.delete();
 		}
