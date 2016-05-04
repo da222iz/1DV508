@@ -18,6 +18,18 @@ public class OrderDB implements Serializable {
 	//	MySQL Connection
 	private MySQLConnection mysql = new MySQLConnection();
 	
+	private int order_number;
+	
+	//	Getters and setters for order number.
+	public int getOrder_number() {
+		return order_number;
+	}
+	public void setOrder_number(int order_number) {
+		this.order_number = order_number;
+	}
+	
+	
+
 	private List<Order> allOrders=getOrder();
 
 	
@@ -148,5 +160,35 @@ public class OrderDB implements Serializable {
 
 	public void setAllOrders(List<Order> allOrders) {
 		this.allOrders = allOrders;
+	}
+	
+	public String getStatus() {
+		String status = "No order found!";
+		
+		try {
+			PreparedStatement stat = mysql.conn().prepareStatement("SELECT * FROM web_shopdb.orders WHERE order_number = '"+this.order_number+"'");
+
+			try {
+				stat.execute();
+				
+				ResultSet rs = stat.getResultSet();
+				while (rs.next()) {
+					status = rs.getString(2);				
+				}
+
+			} finally {
+				//	Close SQL connection.
+				stat.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return status;
 	}
 }
