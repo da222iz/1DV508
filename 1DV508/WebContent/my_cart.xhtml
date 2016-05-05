@@ -53,6 +53,14 @@
 					#{cartmovie.quantity}
 				</h:column>
 				<h:column>
+                    <f:facet name="header"></f:facet>
+                    <h:commandButton value="+" action="#{cart.increaseQuantity(cartmovie)}" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header"></f:facet>
+                    <h:commandButton value="-" action="#{cart.decreaseQuantity(cartmovie)}" />
+                </h:column>
+				<h:column>
 					<f:facet name="header">Unit Price</f:facet>
 					#{cartmovie.price}
 				</h:column>
