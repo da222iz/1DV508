@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
+
 import resources.MySQLConnection;
 
 @SuppressWarnings("serial")
@@ -60,7 +61,7 @@ public class OrderDB implements Serializable {
 
 		try {
 			//	SQL query to delete a movie from the database by id.
-			PreparedStatement stat = mysql.conn().prepareStatement("DELETE FROM web_shopdb.orders WHERE order_id = ?");
+			PreparedStatement stat = mysql.conn().prepareStatement("DELETE FROM web_shopdb.orders WHERE id = ?");
 			//	SQL query to modify columns in an existing table.
 			PreparedStatement stat1 = mysql.conn().prepareStatement("ALTER TABLE web_shopdb.orders AUTO_INCREMENT = ?");
 			try {
@@ -95,7 +96,7 @@ public class OrderDB implements Serializable {
  				
  				try {
  					//	SQL query that adds a movie to the database.
- 					PreparedStatement stat = mysql.conn().prepareStatement(" UPDATE web_shopdb.orders SET status = ? WHERE order_id = ? ");
+ 					PreparedStatement stat = mysql.conn().prepareStatement(" UPDATE web_shopdb.orders SET status = ? WHERE id = ? ");
  					try {
  						stat.setString(1, allOrders.get(i).getStatus());
  						stat.setInt(2, allOrders.get(i).getId());
@@ -191,4 +192,6 @@ public class OrderDB implements Serializable {
 		}
 		return status;
 	}
+	
+	
 }

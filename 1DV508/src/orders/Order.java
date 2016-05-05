@@ -4,9 +4,9 @@ public class Order {
 	
 	private String name;
 	private String address;
-	private String zip;
+	private int zip;
 	private String cityName;
-	private String phone;
+	private int phone;
 	private String email;
 	private String status;
 	private int id;
@@ -30,10 +30,10 @@ public class Order {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	public String getZip() {
+	public int getZip() {
 		return zip;
 	}
-	public void setZip(String zip) {
+	public void setZip(int zip) {
 		this.zip = zip;
 	}
 	public String getCityName() {
@@ -42,10 +42,10 @@ public class Order {
 	public void setCityName(String cityName) {
 		this.cityName = cityName;
 	}
-	public String getPhone() {
+	public int getPhone() {
 		return phone;
 	}
-	public void setPhone(String phone) {
+	public void setPhone(int phone) {
 		this.phone = phone;
 	}
 	public String getEmail() {
