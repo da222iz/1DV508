@@ -19,19 +19,27 @@ public class OrderDB implements Serializable {
 	//	MySQL Connection
 	private MySQLConnection mysql = new MySQLConnection();
 	
-	private int order_number;
-	
-	//	Getters and setters for order number.
-	public int getOrder_number() {
-		return order_number;
-	}
-	public void setOrder_number(int order_number) {
-		this.order_number = order_number;
-	}
-	
-	
+	private String order_number;
+	private Order o = new Order();
 
 	private List<Order> allOrders=getOrder();
+
+	//	Getters and setters for order number.
+	public String getOrder_number() {
+		return order_number;
+	}
+	
+	public void setOrder_number(String order_number) {
+		this.order_number = order_number;
+	}
+
+	//	Getters and setters for Order o.
+	public Order getO() {
+		return o;
+	}
+	public void setO(Order o) {
+		this.o = o;
+	}
 
 	
 	
@@ -163,9 +171,8 @@ public class OrderDB implements Serializable {
 		this.allOrders = allOrders;
 	}
 	
-	public String getStatus() {
-		String status = "No order found!";
-		
+	public String search() {
+		this.o = new Order();
 		try {
 			PreparedStatement stat = mysql.conn().prepareStatement("SELECT * FROM web_shopdb.orders WHERE order_number = '"+this.order_number+"'");
 
@@ -173,8 +180,15 @@ public class OrderDB implements Serializable {
 				stat.execute();
 				
 				ResultSet rs = stat.getResultSet();
-				while (rs.next()) {
-					status = rs.getString(2);				
+				
+				if (rs.next()) {
+				    do {
+						this.o.setStatus(rs.getString(2));
+				    } while (rs.next());
+				} else if (this.order_number.length() > 0) {
+					this.o.setStatus("The order does not exist or has already been delivered.");
+				} else {
+					this.o.setStatus("You must fill in an order number!");
 				}
 
 			} finally {
@@ -190,8 +204,6 @@ public class OrderDB implements Serializable {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		return status;
+		return "support";
 	}
-	
-	
 }
