@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html">
+<h:head>
+	<h:outputStylesheet library="css" name="userStyle.css" />
+	<title>order_info</title>
+</h:head>
+<h:body>
+	<h:form>
+
+		<div id="nav">
+			<ul>
+				<li><a class="active" href="user_home.xhtml">Home</a></li>
+				<li class="dropdown"><h:commandLink id="Movies" class="dropbtn"
+						value="Movies" action="#{movieDB.displayAllMovies()}" />
+					<div class="dropdown-content">
+
+						<div>
+							<h:dataTable value="#{genreDB.genres}" var="genre">
+
+								<h:column>
+									<h:commandLink id="genrelink" value="#{genre.value}"
+										action="#{movieDB.displayGenreMovies(genre)}" />
+								</h:column>
+
+							</h:dataTable>
+						</div>
+					</div></li>
+				<li><a href="my_cart.xhtml">Cart</a></li>
+				<li><h:commandLink id="searchlink" value="Search"
+						action="#{movieDB.displaySearchResults()}" /></li>
+				<h:inputText value="#{movieDB.searchInput}"
+					style=" height : 39px; width : 219px; float:left; position: relative;" />
+				<li><a href="support.xhtml">Support</a></li>
+			</ul>
+		</div>
+		<br />
+		<p style="font-size: 35px; text-align: center;">Your order number</p>
+		<p style="font-size: 72px; text-align: center;">#{cart.random}</p>
+	</h:form>
+</h:body>
+</html>

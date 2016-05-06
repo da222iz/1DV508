@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
+
 import resources.MySQLConnection;
 
 @SuppressWarnings("serial")
@@ -18,6 +19,18 @@ public class OrderDB implements Serializable {
 	//	MySQL Connection
 	private MySQLConnection mysql = new MySQLConnection();
 	
+	private int order_number;
+	
+	//	Getters and setters for order number.
+	public int getOrder_number() {
+		return order_number;
+	}
+	public void setOrder_number(int order_number) {
+		this.order_number = order_number;
+	}
+	
+	
+
 	private List<Order> allOrders=getOrder();
 
 	
@@ -48,7 +61,7 @@ public class OrderDB implements Serializable {
 
 		try {
 			//	SQL query to delete a movie from the database by id.
-			PreparedStatement stat = mysql.conn().prepareStatement("DELETE FROM web_shopdb.orders WHERE order_id = ?");
+			PreparedStatement stat = mysql.conn().prepareStatement("DELETE FROM web_shopdb.orders WHERE id = ?");
 			//	SQL query to modify columns in an existing table.
 			PreparedStatement stat1 = mysql.conn().prepareStatement("ALTER TABLE web_shopdb.orders AUTO_INCREMENT = ?");
 			try {
@@ -83,7 +96,7 @@ public class OrderDB implements Serializable {
  				
  				try {
  					//	SQL query that adds a movie to the database.
- 					PreparedStatement stat = mysql.conn().prepareStatement(" UPDATE web_shopdb.orders SET status = ? WHERE order_id = ? ");
+ 					PreparedStatement stat = mysql.conn().prepareStatement(" UPDATE web_shopdb.orders SET status = ? WHERE id = ? ");
  					try {
  						stat.setString(1, allOrders.get(i).getStatus());
  						stat.setInt(2, allOrders.get(i).getId());
@@ -149,4 +162,36 @@ public class OrderDB implements Serializable {
 	public void setAllOrders(List<Order> allOrders) {
 		this.allOrders = allOrders;
 	}
+	
+	public String getStatus() {
+		String status = "No order found!";
+		
+		try {
+			PreparedStatement stat = mysql.conn().prepareStatement("SELECT * FROM web_shopdb.orders WHERE order_number = '"+this.order_number+"'");
+
+			try {
+				stat.execute();
+				
+				ResultSet rs = stat.getResultSet();
+				while (rs.next()) {
+					status = rs.getString(2);				
+				}
+
+			} finally {
+				//	Close SQL connection.
+				stat.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return status;
+	}
+	
+	
 }
