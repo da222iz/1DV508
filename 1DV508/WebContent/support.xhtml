@@ -34,14 +34,11 @@
 		<div>
 			<label>Order number:</label>
 			<h:inputText id="order_number" value="#{orderDB.order_number}" />
-			<h:commandButton action="#{orderDB.getStatus()}" value="Check order status" />
+			<h:commandButton action="#{orderDB.search()}" value="Check order status" />
 		</div>
 		<div>
-			<h:dataTable value="#{orderDB.status}" var="genre" >
-	            <h:column>
-	            	<label>Order status: </label>#{orderDB.status}
-                </h:column>
-            </h:dataTable>
+			<label>Order status: </label>
+			<h:outputText value="#{orderDB.o.status}" />
 		</div>
 	</h:form>
 </h:body>
