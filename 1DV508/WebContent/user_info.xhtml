@@ -66,23 +66,22 @@
 		</div>
 		
 	<div class="center">
-Name <h:inputText id="name" value="#{cart.temp.name}" />
+Name <h:inputText id="name"  required="true" value="#{cart.temp.name}" />*
 		<br />
-		Address <h:inputText id="address" value="#{cart.temp.address}" />
+Address <h:inputText id="address" required="true" value="#{cart.temp.address}" />*
 		<br />
-ZIP		 <h:inputText id="zip" value="#{cart.temp.zip}" />
+ZIP		 <h:inputText id="zip" required="true" value="#{cart.temp.zip}" />*
 		<br />
-City <h:inputText id="city" value="#{cart.temp.cityName}" />
+City <h:inputText id="city" required="true" value="#{cart.temp.cityName}" />*
 		<br />
-Phone number <h:inputText id="phone" value="#{cart.temp.phone}" />
+Phone number <h:inputText id="phone" required="true" value="#{cart.temp.phone}" />*
 		<br />
-Email <h:inputText id="email" value="#{cart.temp.email}" />
+Email <h:inputText id="email" required="true" value="#{cart.temp.email}" />*
 		<br />
 
 		<h:commandButton id="place" value="Place Order" action="#{cart.placeOrder()}" >
-		
 
-</h:commandButton>
+</h:commandButton><br />
 
 		<br />
 		
