@@ -20,7 +20,20 @@ public class OrderDB implements Serializable {
 	private MySQLConnection mysql = new MySQLConnection();
 	
 	private String order_number;
+<<<<<<< HEAD
+	
+	//	Getters and setters for order number.
+	public String getOrder_number() {
+		return order_number;
+	}
+	public void setOrder_number(String order_number) {
+		this.order_number = order_number;
+	}
+	
+	
+=======
 	private Order o = new Order();
+>>>>>>> refs/heads/master
 
 	private List<Order> allOrders=getOrder();
 
@@ -54,10 +67,10 @@ public class OrderDB implements Serializable {
 		
 	}
 	public int indexOfOrder(Order x){
-		int id=x.getId();
-		int result=-1;
+		int id=x.getOrderNumber();
+		int result=0;
 		for (int i=0; i<allOrders.size(); i++){
-			if (allOrders.get(i).getId()==id){
+			if (allOrders.get(i).getOrderNumber()==id){
 				result=i;
 				break;
 			}
@@ -69,11 +82,11 @@ public class OrderDB implements Serializable {
 
 		try {
 			//	SQL query to delete a movie from the database by id.
-			PreparedStatement stat = mysql.conn().prepareStatement("DELETE FROM web_shopdb.orders WHERE id = ?");
+			PreparedStatement stat = mysql.conn().prepareStatement("DELETE FROM web_shopdb.orders WHERE order_number = ?");
 			//	SQL query to modify columns in an existing table.
 			PreparedStatement stat1 = mysql.conn().prepareStatement("ALTER TABLE web_shopdb.orders AUTO_INCREMENT = ?");
 			try {
-				stat.setInt(1, x.getId());
+				stat.setInt(1, x.getOrderNumber());
 				stat.executeUpdate();
 				
 				List<Order> result = getOrder();
@@ -104,10 +117,10 @@ public class OrderDB implements Serializable {
  				
  				try {
  					//	SQL query that adds a movie to the database.
- 					PreparedStatement stat = mysql.conn().prepareStatement(" UPDATE web_shopdb.orders SET status = ? WHERE id = ? ");
+ 					PreparedStatement stat = mysql.conn().prepareStatement(" UPDATE web_shopdb.orders SET status = ? WHERE order_number = ? ");
  					try {
  						stat.setString(1, allOrders.get(i).getStatus());
- 						stat.setInt(2, allOrders.get(i).getId());
+ 						stat.setInt(2, allOrders.get(i).getOrderNumber());
  						
  						stat.executeUpdate();
 
@@ -140,7 +153,7 @@ public class OrderDB implements Serializable {
 				ResultSet rs = stat.getResultSet();
 				while (rs.next()) {
 					Order m = new Order();
-					m.setId(rs.getInt(1));
+					m.setOrderNumber(rs.getInt(9));
 					m.setStatus(rs.getString(2));
 					m.setName(rs.getString(3));
 					result.add(m);
