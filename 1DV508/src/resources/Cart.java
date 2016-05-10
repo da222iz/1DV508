@@ -18,7 +18,34 @@ import orders.Order;
 public class Cart implements Serializable {
 	private MySQLConnection mysql = new MySQLConnection();
 	List<Movie> contents = new ArrayList<>();
-	int random;
+	private int random;
+	private int currentQuantity;
+	private Movie tempMovie;
+	private String massage="All fields are required";
+	
+	public int getCurrentQuantity() {
+		return currentQuantity;
+	}
+
+	public void setCurrentQuantity(int currentQuantity) {
+		this.currentQuantity = currentQuantity;
+	}
+
+	public Movie getTempMovie() {
+		return tempMovie;
+	}
+
+	public void setTempMovie(Movie tempMovie) {
+		this.tempMovie = tempMovie;
+	}
+
+	public String getMassage() {
+		return massage;
+	}
+
+	public void setMassage(String massage) {
+		this.massage = massage;
+	}
 
 	private Order temp = new Order();
 
@@ -45,10 +72,40 @@ public class Cart implements Serializable {
 	public void setContents(List<Movie> contents) {
 		this.contents = contents;
 	}
+/**/
+	public void updateQuantity() {
+
+		try {
+			// SQL query that adds a movie to the database.
+			PreparedStatement stat = mysql.conn().prepareStatement("UPDATE web_shopdb.movies SET quantity = ? WHERE id = ?");
+			try {
+					stat.setInt(1, currentQuantity+1);
+				 stat.setInt(2,tempMovie.getId() );
+
+				stat.executeUpdate();
+
+			} finally {
+				// Close SQL connection.
+				stat.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
+	}
 
 	public String placeOrder() {
 		
-		random= (int) Math.floor((Math.random() * 1000000000)+10000);
+			updateQuantity();
+		
+
+		random = (int) Math.floor((Math.random() * 1000000000) + 10000);
 		try {
 			// SQL query that adds a movie to the database.
 			PreparedStatement stat = mysql.conn().prepareStatement(
@@ -63,8 +120,7 @@ public class Cart implements Serializable {
 				stat.setInt(6, temp.getPhone());
 				stat.setString(7, temp.getEmail());
 				stat.setInt(8, random);
-				
-				
+
 				stat.executeUpdate();
 
 			} finally {
@@ -83,11 +139,12 @@ public class Cart implements Serializable {
 
 		emptyCart();
 		return "order_info";
+		
 
 	}
 
 	public void AddToCart(Movie m) {
-		Movie tempMovie = new Movie();
+	   tempMovie = new Movie();
 		tempMovie.setId(m.getId());
 		tempMovie.setTitle(m.getTitle());
 		tempMovie.setDescription(m.getDescription());
@@ -96,7 +153,7 @@ public class Cart implements Serializable {
 		tempMovie.setQuantity(1);
 		if (this.contains(tempMovie)) {
 			int index = this.getIndexOfMovie(tempMovie);
-			int currentQuantity = contents.get(index).getQuantity();
+			currentQuantity = contents.get(index).getQuantity();
 			contents.get(index).setQuantity(currentQuantity + 1);
 		} else {
 			contents.add(tempMovie);
@@ -105,31 +162,32 @@ public class Cart implements Serializable {
 	}
 
 	public String decreaseQuantity(Movie m) {
-		Movie tempMovie = new Movie();
-		tempMovie.setId(m.getId());
-		tempMovie.setTitle(m.getTitle());
-		tempMovie.setDescription(m.getDescription());
-		tempMovie.setGenre(m.getGenre());
-		tempMovie.setPrice(m.getPrice());
-		tempMovie.setQuantity(1);
-		int index = this.getIndexOfMovie(tempMovie);
-		int currentQuantity = contents.get(index).getQuantity();
+		 Movie tempMovie2 = new Movie();
+		tempMovie2.setId(m.getId());
+		tempMovie2.setTitle(m.getTitle());
+		tempMovie2.setDescription(m.getDescription());
+		tempMovie2.setGenre(m.getGenre());
+		tempMovie2.setPrice(m.getPrice());
+		tempMovie2.setQuantity(1);
+		int index = this.getIndexOfMovie(tempMovie2);
+		 currentQuantity = contents.get(index).getQuantity();
 		if (currentQuantity != 0) {
 			contents.get(index).setQuantity(currentQuantity - 1);
+
 		}
 		return "my_cart";
 	}
 
 	public String increaseQuantity(Movie m) {
-		Movie tempMovie = new Movie();
-		tempMovie.setId(m.getId());
-		tempMovie.setTitle(m.getTitle());
-		tempMovie.setDescription(m.getDescription());
-		tempMovie.setGenre(m.getGenre());
-		tempMovie.setPrice(m.getPrice());
-		tempMovie.setQuantity(1);
-		int index = this.getIndexOfMovie(tempMovie);
-		int currentQuantity = contents.get(index).getQuantity();
+	 Movie tempMovie1 = new Movie();
+		tempMovie1.setId(m.getId());
+		tempMovie1.setTitle(m.getTitle());
+		tempMovie1.setDescription(m.getDescription());
+		tempMovie1.setGenre(m.getGenre());
+		tempMovie1.setPrice(m.getPrice());
+		tempMovie1.setQuantity(1);
+		int index = this.getIndexOfMovie(tempMovie1);
+		 currentQuantity = contents.get(index).getQuantity();
 		contents.get(index).setQuantity(currentQuantity + 1);
 		return "my_cart";
 	}
