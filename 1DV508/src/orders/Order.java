@@ -10,8 +10,14 @@ public class Order {
 	private String email;
 	private String status;
 	private int id;
+private int orderNumber;
 
-
+	public int getOrderNumber() {
+	return orderNumber;
+}
+public void setOrderNumber(int orderNumber) {
+	this.orderNumber = orderNumber;
+}
 	public int getId() {
 		return id;
 	}
