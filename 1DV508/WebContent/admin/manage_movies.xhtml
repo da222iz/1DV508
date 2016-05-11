@@ -8,49 +8,61 @@
       
 <h:head>
 	<h:outputStylesheet library="css" name="style.css" />
-	<title>manage_genres</title>
+	<title>manage_movies</title>
 </h:head>
  <h:body>     
     <h:form>
         <div class="menue">
             <ul id="menu" >
-                <li><a class="active" href="login.xhtml">Home</a></li>
-                <li><a class="active" href="manage_movies.xhtml">PRODUCTS</a></li>
-                <li><a class="active" href="manage_order.xhtml">ORDERS</a></li>
-                <li><a class="active" href="manage_accounts.xhtml">ACCOUNTS</a></li>
-                <li><a class="active" href="manage_genres.xhtml">CATEGORIES</a></li>
-                <li><a class="active" href="index.xhtml">LOGOUT</a></li>
+                <li><a class="active" href="admin_home.xhtml">Home</a></li>
+				<li><a class="active" href="manage_movies.xhtml">Products</a></li>
+				<li><a class="active" href="manage_order.xhtml">Orders</a></li>
+				<li><a class="active" href="manage_accounts.xhtml">Accounts</a></li>
+				<li><a class="active" href="manage_genres.xhtml">Categories</a></li>
+				<h:commandButton value="Logout" action="#{userDB.logout()}"/>
             </ul>
         </div>
 
         <div class="center">
-            Manage Genres
+            Manage Movies
         </div>
         <div class="table">
-            <h:dataTable value="#{genreDB.genres}" var="g" styleClass="users" border="1"
+            <h:dataTable value="#{movieDB.movies}" var="m" styleClass="users" border="1"
                          headerClass="userTableHeader"
                          rowClasses="characterTableOddRow,characterTableEvenRow">
                 <h:column>
                     <f:facet name="header">ID</f:facet>
-                    #{g.id}
+                    #{m.id}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Title</f:facet>
+                    #{m.title}
                 </h:column>
                 <h:column>
                     <f:facet name="header">Genre</f:facet>
-                    #{g.value}
+                    #{m.genre}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Quantity</f:facet>
+                    #{m.quantity}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Price</f:facet>
+                    #{m.price}
                 </h:column>
                 <h:column>
                     <f:facet name="header">edit</f:facet>
-                    <h:commandButton value="edit" action="#{genreDB.edit(g)}" />
+                    <h:commandButton value="edit" action="#{movieDB.edit(m)}" />
                 </h:column>
                 <h:column>
                     <f:facet name="header">delete</f:facet>
-                    <h:commandButton value="delete" action="#{genreDB.delete(g)}" />
+                    <h:commandButton value="delete" action="#{movieDB.delete(m)}" />
                 </h:column>
             </h:dataTable>
         </div>
         <div class="center">
             <br />
-            <h:commandButton value="add genre" action="add_genre"/>
+            <h:commandButton value="add movie" action="#{movieDB.goToAdd()}"/>
             <br />
         </div>
     </h:form>
