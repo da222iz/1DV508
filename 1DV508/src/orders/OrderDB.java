@@ -210,4 +210,11 @@ public class OrderDB implements Serializable {
 		}
 		return "support";
 	}
+	
+	public String supportLink() {
+		setOrder_number("");
+		this.o = new Order();
+		return "support";
+		
+	}
 }
