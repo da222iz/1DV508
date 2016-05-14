@@ -59,19 +59,19 @@ public class MovieDB implements Serializable{
 		
 		this.searchResult = this.getMovies();
 		
-		return "user_home";
+		return "index";
 	}
 	public String displayGenreMovies(Genre thegenre){
 		
 		this.searchResult = this.getGenreMovies(thegenre);
 		
-		return "user_home";
+		return "index";
 	}
 	public String displaySearchResults(){
 		
 		this.searchResult = this.getSearchInMovies();
 		
-		return "user_home";
+		return "index";
 	}
 	
 	/**

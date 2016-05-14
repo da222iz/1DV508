@@ -12,6 +12,7 @@ import javax.inject.Named;
 import resources.MySQLConnection; // MySQLConnection.java
 
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.FacesContext;
 
 @SuppressWarnings("serial")
 @Named
@@ -138,8 +139,11 @@ public class UserDB implements Serializable {
 		
 		for (int i = 0; i < result.size(); i++) {
 			if (loginUser.getUsername().equals(result.get(i).getUsername()) && loginUser.getPassword().equals(result.get(i).getPassword()))
+			{
+				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("username", loginUser.getUsername());
+				return "admin_home.xhtml";
+			}
 				
-				return "login";
 							}
 		this.message="Invalid username or password";
 		return "index";
@@ -195,5 +199,11 @@ public class UserDB implements Serializable {
 
 	public void setLoginUser(User theloginUser) {
 		this.loginUser = theloginUser;
+	}
+	
+	public String logout()
+	{
+		FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+		return "login";
 	}
 }

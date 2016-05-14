@@ -9,46 +9,47 @@
 <h:head>
 	<h:outputStylesheet library="css" name="style.css" />
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-	<title>edit_movie</title>
+	<title>add_movie</title>
 </h:head>
 <h:body>
 
 	<h:form id="fileUpoad" prependId="false" enctype="multipart/form-data">
 		<div class="menue">
 		<ul id="menu" >
-			<li><a class="active" href="login.xhtml">Home</a></li>
+			<li><a class="active" href="admin_home.xhtml">Home</a></li>
 			<li><a class="active" href="manage_movies.xhtml">PRODUCTS</a></li>
 			<li><a class="active" href="#contact">ORDERS</a></li>
 			<li><a class="active" href="manage_accounts.xhtml">ACCOUNTS</a></li>
 			<li><a class="active" href="manage_genres.xhtml">CATEGORIES</a></li>
-			<li><a class="active" href="index.xhtml">LOGOUT</a></li>
+			<li><a class="active" href="login.xhtml">LOGOUT</a></li>
 		</ul>
 		</div>
 		<div class="center">
-			Edit Movie : #{movieDB.temp.title}
+			Add Movie
 		</div>
-	
+		<p:messages showDetail="true"/>
+		
 	<div class="center">
-New title <h:inputText id="title" value="#{movieDB.temp.title}" />
+title <h:inputText id="title" value="#{movieDB.temp.title}" />
 		<br />
-New genre <h:selectOneMenu id="menu" immediate="true" value="#{movieDB.temp.genre}">
+genre <h:selectOneMenu id="menu" immediate="true" value="#{movieDB.temp.genre}">
 		<f:selectItems value="#{genreDB.genresArray}" />
 		</h:selectOneMenu><br/>
-New description <h:inputText id="description" value="#{movieDB.temp.description}" />
-		<br />	
+description <h:inputText id="description" value="#{movieDB.temp.description}" />
+		<br />
 		<h:outputLabel for="fileImage" value="Upload Image:" />
-		<p:fileUpload id="fileImage"  value="#{movieDB.image}" mode="simple" alt="" skinSimple="true" description="Image" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+		<p:fileUpload id="fileImage"  value="#{movieDB.image}" mode="simple" skinSimple="true" description="Image" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
 		<br />
-New quantity <h:inputText id="quantity" value="#{movieDB.temp.quantity}" />
+quantity <h:inputText id="quantity" value="#{movieDB.temp.quantity}" />
 		<br />
-New price <h:inputText id="price" value="#{movieDB.temp.price}" />
-		<br />
-				
-		<h:commandButton value="save" ajax="false" action="#{movieDB.save()}" />
-		<br />
+price <h:inputText id="price" value="#{movieDB.temp.price}" />
+		<br />	
+
+		<h:commandButton value="save" action="#{movieDB.add()}" />
 		<br />
 </div>
 
+		
 	</h:form>
 </h:body>
 </html>
