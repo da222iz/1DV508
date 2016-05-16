@@ -3,6 +3,7 @@ package resources;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,10 +67,56 @@ public class Cart implements Serializable {
 	public void setContents(List<Movie> contents) {
 		this.contents = contents;
 	}
+	
+	private boolean orderNumberExists(int n){
+		boolean exists=false;
+		List<Order> allOrders = new ArrayList<>();
+
+		try {
+			//	SQL query that retrieves all movies from database.
+			PreparedStatement stat = mysql.conn().prepareStatement("SELECT * FROM web_shopdb.orders");
+
+			try {
+				stat.execute();
+				ResultSet rs = stat.getResultSet();
+				while (rs.next()) {
+					Order m = new Order();
+					m.setOrderNumber(rs.getInt(9));
+					m.setStatus(rs.getString(2));
+					m.setName(rs.getString(3));
+					allOrders.add(m);
+					
+				}
+
+			} finally {
+				//	Close SQL connection.
+				stat.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		for (int i=0; i<allOrders.size(); i++){
+			if(allOrders.get(i).getOrderNumber()==n){
+				exists=true;
+				break;
+			}
+		}
+		return exists;
+		
+	}
 
 	public String placeOrder() {
+		do{
+			random = (int) Math.floor((Math.random() * 1000000000)+10000);
+		}while(this.orderNumberExists(random));
 		
-		random= (int) Math.floor((Math.random() * 1000000000)+10000);
+		//random = (int) System.nanoTime();
 		try {
 			PreparedStatement stat = mysql.conn().prepareStatement(
 					"INSERT INTO web_shopdb.orders ( status, name, address, zip, city, phone, email, order_number, total_price) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)");

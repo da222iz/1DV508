@@ -102,6 +102,42 @@ public class OrderDB implements Serializable {
 
 		return "manage_order";
 	}
+	
+	public Order getLatestOrder() {
+		List<Order> result = new ArrayList<>();
+
+		try {
+			//	SQL query that retrieves all movies from database.
+			PreparedStatement stat = mysql.conn().prepareStatement("SELECT * FROM web_shopdb.orders ORDER BY id DESC LIMIT 1;");
+
+			try {
+				stat.execute();
+				ResultSet rs = stat.getResultSet();
+				while (rs.next()) {
+					Order m = new Order();
+					m.setOrderNumber(rs.getInt(9));
+					m.setStatus(rs.getString(2));
+					m.setName(rs.getString(3));
+					m.setId(rs.getInt(1));
+					result.add(m);
+					
+				}
+
+			} finally {
+				//	Close SQL connection.
+				stat.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return result.get(0);
+	}
  
  	public String updateStatus() {
  			for(int i=0; i<allOrders.size(); i++){

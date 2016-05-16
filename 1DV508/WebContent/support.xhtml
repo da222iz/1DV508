@@ -13,7 +13,7 @@
 	<h:form id="support_form">
 		<div id="nav">
 			<ul>
-	  			<li><a class="active" href="index.xhtml">Home</a></li>
+	  			<li><h:commandLink id="Home" value="Home" action="#{movieDB.displayRandomMovies()}" /></li>
 	  			<li class="dropdown">
 	  				<h:commandLink id="Movies" class="dropbtn" value="Movies" action="#{movieDB.displayAllMovies()}" />
 	    			<div class="dropdown-content">

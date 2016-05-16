@@ -31,7 +31,8 @@ public class MovieDB implements Serializable{
 	private Movie temp=new Movie();
 	private UploadedFile image;
 	private String searchInput="";
-	private List<Movie> searchResult = this.getMovies();
+	private List<Movie> searchResult = this.getRandomMovies();
+	private String displayMessage="Welcome to MyMovieWepShop!";
 	
 	// Getters and Setters for Movie
 	public Movie getTemp() {
@@ -57,17 +58,30 @@ public class MovieDB implements Serializable{
 	}
 	public String displayAllMovies(){
 		
+		this.displayMessage = "You are browsing all movies";
+		
 		this.searchResult = this.getMovies();
 		
 		return "index";
 	}
+	public String displayRandomMovies(){
+		this.displayMessage = "Welcome to MyMovieWepShop!";
+		
+		this.searchResult = this.getRandomMovies();
+		
+		return "index";
+	}
 	public String displayGenreMovies(Genre thegenre){
+		
+		this.displayMessage = "You are browsing "+thegenre.getValue()+" movies";
 		
 		this.searchResult = this.getGenreMovies(thegenre);
 		
 		return "index";
 	}
 	public String displaySearchResults(){
+		
+		this.displayMessage = "Search results for \""+this.searchInput+" \"";
 		
 		this.searchResult = this.getSearchInMovies();
 		
@@ -105,6 +119,44 @@ public class MovieDB implements Serializable{
 
 			} finally {
 				//	Close SQL connection.
+				stat.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return result;
+		
+	}
+	
+	public List<Movie> getRandomMovies(){
+		List<Movie> result = new ArrayList<>();
+
+		try {
+
+			PreparedStatement stat = mysql.conn().prepareStatement("select * from web_shopdb.movies order by rand() limit 5");
+
+			try {
+				stat.execute();
+				ResultSet rs = stat.getResultSet();
+				while (rs.next()) {
+					Movie m = new Movie();
+					m.setId(rs.getInt(1));
+					m.setTitle(rs.getString(2));
+					m.setGenre(rs.getString(3));
+					m.setDescription(rs.getString(4));
+					m.setImgPath(rs.getString(5));
+					m.setQuantity(rs.getInt(6));
+					m.setPrice(rs.getFloat(7));
+					result.add(m);
+				}
+
+			} finally {
 				stat.close();
 			}
 		} catch (SQLException e) {
@@ -423,6 +475,12 @@ public class MovieDB implements Serializable{
 		}
 		catch(Exception e){	
 		}
+	}
+	public String getDisplayMessage() {
+		return displayMessage;
+	}
+	public void setDisplayMessage(String displayMessage) {
+		this.displayMessage = displayMessage;
 	}	
 	
 }
