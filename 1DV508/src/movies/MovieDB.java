@@ -62,12 +62,20 @@ public class MovieDB implements Serializable{
 		
 		this.searchResult = this.getMovies();
 		
+		if (this.searchResult.size()==0){
+			this.displayMessage = "No Available Movies";
+		}
+		
 		return "index";
 	}
 	public String displayRandomMovies(){
 		this.displayMessage = "Welcome to MyMovieWepShop!";
 		
 		this.searchResult = this.getRandomMovies();
+		
+		if (this.searchResult.size()==0){
+			this.displayMessage = "No Available Movies";
+		}
 		
 		return "index";
 	}
@@ -77,6 +85,10 @@ public class MovieDB implements Serializable{
 		
 		this.searchResult = this.getGenreMovies(thegenre);
 		
+		if (this.searchResult.size()==0){
+			this.displayMessage = "No Available Movies";
+		}
+		
 		return "index";
 	}
 	public String displaySearchResults(){
@@ -84,6 +96,10 @@ public class MovieDB implements Serializable{
 		this.displayMessage = "Search results for \""+this.searchInput+" \"";
 		
 		this.searchResult = this.getSearchInMovies();
+		
+		if (this.searchResult.size()==0){
+			this.displayMessage = "No Available Movies";
+		}
 		
 		return "index";
 	}
