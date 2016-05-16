@@ -125,7 +125,7 @@ public class MovieDB implements Serializable{
 
 		try {
 
-			PreparedStatement stat = mysql.conn().prepareStatement(" SELECT * FROM web_shopdb.movies WHERE genre = ? ");
+			PreparedStatement stat = mysql.conn().prepareStatement(" SELECT * FROM web_shopdb.productview WHERE genre = ? ");
 
 			try {
 				stat.setString(1, genre.getValue());
@@ -164,7 +164,7 @@ public class MovieDB implements Serializable{
 
 		try {
 			//	SQL query that retrieves all movies from database.
-			PreparedStatement stat = mysql.conn().prepareStatement("SELECT * FROM web_shopdb.movies");
+			PreparedStatement stat = mysql.conn().prepareStatement("SELECT * FROM web_shopdb.productview");
 
 			try {
 				stat.execute();
@@ -221,7 +221,7 @@ public class MovieDB implements Serializable{
 			PreparedStatement stat = mysql.conn().prepareStatement("INSERT INTO web_shopdb.movies (title, genre, description, image_path, quantity, price) VALUES (?, ?, ?, ?, ?, ?)");
 			try {
 				stat.setString(1, temp.getTitle());
-				stat.setString(2, temp.getGenre());
+				stat.setInt(2, temp.getGenreId());
 				stat.setString(3, temp.getDescription());
 				stat.setString(4, temp.getImgPath());
 				stat.setInt(5, temp.getQuantity());
@@ -313,7 +313,7 @@ public class MovieDB implements Serializable{
 			PreparedStatement stat = mysql.conn().prepareStatement("UPDATE web_shopdb.movies SET title = ?, genre = ?, description = ?, image_path = ?, quantity = ?, price = ?  WHERE id = ?");
 			try {
 				stat.setString(1, temp.getTitle());
-				stat.setString(2, temp.getGenre());
+				stat.setInt(2, temp.getGenreId());
 				stat.setString(3, temp.getDescription());
 				stat.setString(4, temp.getImgPath());
 				stat.setInt(5, temp.getQuantity());
@@ -344,6 +344,7 @@ public class MovieDB implements Serializable{
 		
 		//	The object will find the path to the film's poster.
 		String tempPath = System.getProperty("user.home")+"/git/1DV508/1DV508/WebContent/resources/"+this.temp.getImgPath();
+		System.out.println(tempPath);
 		
 		List<Movie> imageDuplicates=this.getImageDuplicates(this.temp.getImgPath());
 		

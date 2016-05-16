@@ -99,11 +99,10 @@ public class UserDB implements Serializable {
 	public String save(){
 		try {
 			//	SQL query that updates one user to the database by id.
-			PreparedStatement stat = mysql.conn().prepareStatement("UPDATE users SET Username = ?, Password = ? WHERE id = ?");
+			PreparedStatement stat = mysql.conn().prepareStatement("UPDATE users SET Password = ? WHERE id = ?");
 			try {
-				stat.setString(1, temp.getUsername());
-				stat.setString(2, temp.getPassword());
-				stat.setInt(3, temp.getId());
+				stat.setString(1, temp.getPassword());
+				stat.setInt(2, temp.getId());
 				stat.executeUpdate();
 				
 			} finally {
