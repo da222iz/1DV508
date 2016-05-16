@@ -34,13 +34,15 @@
         </div>
   </li>
   <li><a href="my_cart.xhtml">Cart</a></li>
-  <li><h:commandLink id="searchlink" value="Search" action="#{movieDB.displaySearchResults()}" /></li>
+  
   <h:inputText value="#{movieDB.searchInput}" style=" height : 39px; width : 219px; float:left; position: relative;"/>
+  <li><h:commandLink id="searchlink" value="Search" action="#{movieDB.displaySearchResults()}" /></li>
   <li><h:commandLink action="#{orderDB.supportLink()}" value="Support" /></li>
 </ul>
  </div>
  <div class="Message">
-			#{movieDB.displayMessage}
+ <p style="font-size: 35px; text-align: center;">#{movieDB.displayMessage}</p>
+			
 		</div>
  		
         <div class="table center">
