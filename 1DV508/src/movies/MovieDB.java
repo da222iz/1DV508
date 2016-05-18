@@ -232,7 +232,7 @@ public class MovieDB implements Serializable{
 
 		try {
 			//	SQL query that retrieves all movies from database.
-			PreparedStatement stat = mysql.conn().prepareStatement("SELECT * FROM web_shopdb.productview");
+			PreparedStatement stat = mysql.conn().prepareStatement("SELECT * FROM web_shopdb.productview order by id");
 
 			try {
 				stat.execute();
