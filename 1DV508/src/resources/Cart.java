@@ -185,10 +185,10 @@ public class Cart implements Serializable {
 	 * @param m
 	 */
 	public void AddToCart(Movie m) {
-		/*float totalPrice;
+	/*float totalPrice;
 		if (contains(m) == true) {
 			CartContents current = this.getIndexOfMovie(m);
-			if (current.getNumber() < current.getMovie().getQuantity())) {
+			if (current.getNumber() < current.getMovie().getQuantity()) {
 				current.setNumber(current.getNumber() + 1);
 				totalPrice = (this.getTotalPrice() - (current.getMovie().getPrice() * (current.getNumber() - 1))) + (current.getMovie().getPrice() * current.getNumber());
 				setTotalPrice(BigDecimal.valueOf(totalPrice).setScale(2,BigDecimal.ROUND_HALF_UP).floatValue());
@@ -199,7 +199,7 @@ public class Cart implements Serializable {
 			setTotalPrice(BigDecimal.valueOf(totalPrice).setScale(2,BigDecimal.ROUND_HALF_UP).floatValue());
 		}*/
 		
-		if (contains(m) == false) {
+	if (contains(m) == false) {
 			if (m.getQuantity() > 0) {
 				cart.add(new CartContents(m,1));
 				
