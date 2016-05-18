@@ -8,50 +8,112 @@
 <h:head>
 
 
-<h:outputStylesheet library="css" name="userStyle.css" />
+<h:outputStylesheet library="css" name="productDetails.css" />
 <title>Home</title>
+	<style> 
+	.Bimage{
+     background-image:url(/1DV508/resources/css/background.jpg);
+     background-size:100%;
+   
+ }
+	</style>
 </h:head>
-<h:body>
+<h:body class="Bimage">
 <h:form>
 
 
-<div id="nav">
-<ul>
-  <li><h:commandLink id="Home" value="Home" action="#{movieDB.displayRandomMovies()}" /></li>
-  <li class="dropdown">
+<div id="header"  class="container">
+
+<div id="vSearch">
+			<h:commandLink id="searchlink" value="Search" action="#{movieDB.displaySearchResults()}" />
+  <h:inputText value="#{movieDB.searchInput}" style=" border-radius: 30px 30px 30px 30px; height : 39px; width : 219px; float:left; position: relative;"/>
+
+</div>
+
+	<div id="menu">
+		<ul>
+			<li ><a  href="index.xhtml">Home</a></li>
+			  <li class="dropdown">
   <h:commandLink id="Movies" class="dropbtn" value="Movies" action="#{movieDB.displayAllMovies()}" />
-    <div class="dropdown-content">
-    
+    <div class="dropdown-content">   
            <div >
-            <h:dataTable value="#{genreDB.genres}" var="genre" >
-                         
+            <h:dataTable value="#{genreDB.genres}" var="genre" >                        
        				<h:column>
        				<h:commandLink id="genrelink" value="#{genre.value}" action="#{movieDB.displayGenreMovies(genre)}" />
-                    </h:column>
-               
+                    </h:column>      
          </h:dataTable>
         </div>
         </div>
   </li>
-  <li><a href="my_cart.xhtml">Cart</a></li>
-  
-  <h:inputText value="#{movieDB.searchInput}" style=" height : 39px; width : 219px; float:left; position: relative;"/>
-  <li><h:commandLink id="searchlink" value="Search" action="#{movieDB.displaySearchResults()}" /></li>
-  <li><h:commandLink action="#{orderDB.supportLink()}" value="Support" /></li>
-</ul>
- </div>
- 
-		<div>	
-      	<h:graphicImage name="#{movieDB.temp.imgPath}" alt="#{movieDB.temp.title}"/>
-      	</div>
-      	<div>
+			<li><a href="my_cart.xhtml">Cart</a></li>
+
+			  <li><a href="#">Support</a></li>
+		</ul>
+	</div>
+</div>
+
+<div id="wrapper" class="container">
+
+	<div id="page">
+	
+		<div id="content"> 
+		
+		<h:graphicImage name="#{movieDB.temp.imgPath}" alt="#{movieDB.temp.title}"/>
+		
+			
+			<div>
       	<h1>#{movieDB.temp.title}</h1>
-        #{movieDB.temp.description}
-        </div>
-        <div>
+      
+        
+        <br /> <br />
+          <div>
         Available Quantity #{movieDB.temp.quantity} 
-        <h:commandLink id="addtocart" value="Add to Cart" action="#{cart.AddToCart(movieDB.temp)}" />
 		</div>
+		<br />
+		
+		
+
+		
+       <button class="button yellow" onclick="#{cart.AddToCart(movieDB.temp)}" >
+       
+	<div class="title">Add to cart</div>
+	<div class="price">#{movieDB.temp.price}</div>
+</button>
+        
+        
+        
+        </div>
+
+		</div>
+		
+		
+      
+		
+		
+		
+		<div id="sidebar">
+			<div id="sbox1">
+				<h2>#{movieDB.temp.title}</h2>
+				<ul class="list-style1">
+					
+					<li>
+						<h3>Description</h3>
+						<p>#{movieDB.temp.description}</p>
+					</li>
+					<li>
+						<h3>Other</h3>
+						<p>#{movieDB.temp.description}</p>
+					</li>
+				</ul>
+			</div>
+		</div>
+		 </div>
+		</div>
+
+
+<div id="footer">
+	<p>&copy; Untitled. All rights reserved. Design by </p>
+</div>
 </h:form>
 </h:body>
 </html>
