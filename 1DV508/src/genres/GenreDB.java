@@ -41,9 +41,11 @@ public class GenreDB implements Serializable {
 
 		try {
 			//	SQL query that retrieves all genres from database.
-			PreparedStatement stat = mysql.conn().prepareStatement("SELECT * FROM web_shopdb.genres");
+			Connection conn = mysql.conn();
+			
 
 			try {
+				PreparedStatement stat = conn.prepareStatement("SELECT * FROM web_shopdb.genres");
 				stat.execute();
 				ResultSet rs = stat.getResultSet();
 				while (rs.next()) {
@@ -52,11 +54,10 @@ public class GenreDB implements Serializable {
 					g.setValue(rs.getString(2));
 					result.add(g);
 				}
-				stat.close();
 
 			} finally {
 				//	Close SQL connection.
-				stat.close();
+				conn.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

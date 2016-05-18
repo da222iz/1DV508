@@ -10,6 +10,7 @@ import java.util.List;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 
+import movies.Movie;
 import resources.MySQLConnection;
 
 @SuppressWarnings("serial")
@@ -25,6 +26,7 @@ public class OrderDB implements Serializable {
 	
 	
 	private Order o = new Order();
+	private Order temp = new Order();
 
 	private List<Order> allOrders=getOrder();
 
@@ -43,6 +45,11 @@ public class OrderDB implements Serializable {
 	}
 	public void setO(Order o) {
 		this.o = o;
+	}
+	
+	public String goToOrderDetails(Order order) {
+		this.temp = order;
+		return "order_details";
 	}
 
 	
@@ -103,6 +110,40 @@ public class OrderDB implements Serializable {
 		return "manage_order";
 	}
 	
+	public List<Movie> getOrderMovies(int orderNum){
+		List<Movie> result = new ArrayList<>();
+
+		try {
+
+			PreparedStatement stat = mysql.conn().prepareStatement(" SELECT * FROM web_shopdb.ordered_movies WHERE order_number = ? ");
+
+			try {
+				stat.setInt(1, orderNum);
+				stat.execute();
+				ResultSet rs = stat.getResultSet();
+				while (rs.next()) {
+					Movie m = new Movie();
+					m.setTitle(rs.getString(2));
+					m.setQuantity(rs.getInt(3));
+					result.add(m);
+				}
+
+			} finally {
+				stat.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return result;
+		
+	}
+	
 	public Order getLatestOrder() {
 		List<Order> result = new ArrayList<>();
 
@@ -115,10 +156,17 @@ public class OrderDB implements Serializable {
 				ResultSet rs = stat.getResultSet();
 				while (rs.next()) {
 					Order m = new Order();
-					m.setOrderNumber(rs.getInt(9));
+					m.setId(rs.getInt(1));
 					m.setStatus(rs.getString(2));
 					m.setName(rs.getString(3));
-					m.setId(rs.getInt(1));
+					m.setAddress(rs.getString(4));
+					m.setZip(rs.getInt(5));
+					m.setCityName(rs.getString(6));
+					m.setPhone(rs.getInt(7));
+					m.setEmail(rs.getString(8));
+					m.setOrderNumber(rs.getInt(9));
+					m.setTotalPrice(rs.getFloat(10));
+					
 					result.add(m);
 					
 				}
@@ -180,9 +228,16 @@ public class OrderDB implements Serializable {
 				ResultSet rs = stat.getResultSet();
 				while (rs.next()) {
 					Order m = new Order();
-					m.setOrderNumber(rs.getInt(9));
+					m.setId(rs.getInt(1));
 					m.setStatus(rs.getString(2));
 					m.setName(rs.getString(3));
+					m.setAddress(rs.getString(4));
+					m.setZip(rs.getInt(5));
+					m.setCityName(rs.getString(6));
+					m.setPhone(rs.getInt(7));
+					m.setEmail(rs.getString(8));
+					m.setOrderNumber(rs.getInt(9));
+					m.setTotalPrice(rs.getFloat(10));
 					result.add(m);
 					
 				}
@@ -252,5 +307,13 @@ public class OrderDB implements Serializable {
 		this.o = new Order();
 		return "support";
 		
+	}
+
+	public Order getTemp() {
+		return temp;
+	}
+
+	public void setTemp(Order temp) {
+		this.temp = temp;
 	}
 }

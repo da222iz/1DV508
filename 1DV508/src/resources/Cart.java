@@ -112,53 +112,64 @@ public class Cart implements Serializable {
 	}
 
 	public String placeOrder() {
-		do{
-			random = (int) Math.floor((Math.random() * 1000000000)+10000);
-		}while(this.orderNumberExists(random));
-		
-		//random = (int) System.nanoTime();
-		try {
-			PreparedStatement stat = mysql.conn().prepareStatement(
-					"INSERT INTO web_shopdb.orders ( status, name, address, zip, city, phone, email, order_number, total_price) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-			PreparedStatement stat1 = mysql.conn().prepareStatement("UPDATE web_shopdb.movies SET quantity = ? WHERE id = ?");
+		if (cart.size()!=0){
+			do{
+				random = (int) Math.floor((Math.random() * 1000000000)+10000);
+			}while(this.orderNumberExists(random));
+			
+			//random = (int) System.nanoTime();
 			try {
+				PreparedStatement stat = mysql.conn().prepareStatement(
+						"INSERT INTO web_shopdb.orders ( status, name, address, zip, city, phone, email, order_number, total_price) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+				PreparedStatement stat1 = mysql.conn().prepareStatement("UPDATE web_shopdb.movies SET quantity = ? WHERE id = ?");
+				PreparedStatement stat2 = mysql.conn().prepareStatement(
+						"INSERT INTO web_shopdb.ordered_movies ( order_number, movie_title, quantity) VALUES ( ?, ?, ?)");
+				try {
 
-				stat.setString(1, "NEW");
-				stat.setString(2, temp.getName());
-				stat.setString(3, temp.getAddress());
-				stat.setInt(4, temp.getZip());
-				stat.setString(5, temp.getCityName());
-				stat.setInt(6, temp.getPhone());
-				stat.setString(7, temp.getEmail());
-				stat.setInt(8, random);
-				stat.setFloat(9, getTotalPrice());
-				
-				for (int i = 0; i < cart.size(); i++) {
-					stat1.setInt(1, (cart.get(i).getMovie().getQuantity() - cart.get(i).getNumber()));
-					stat1.setInt(2, cart.get(i).getMovie().getId());
+					stat.setString(1, "NEW");
+					stat.setString(2, temp.getName());
+					stat.setString(3, temp.getAddress());
+					stat.setInt(4, temp.getZip());
+					stat.setString(5, temp.getCityName());
+					stat.setInt(6, temp.getPhone());
+					stat.setString(7, temp.getEmail());
+					stat.setInt(8, random);
+					stat.setFloat(9, getTotalPrice());
 					
-					stat1.executeUpdate();
+					for (int i = 0; i < cart.size(); i++) {
+						stat2.setInt(1, random);
+						stat2.setString(2, cart.get(i).getMovie().getTitle());
+						stat2.setInt(3, cart.get(i).getNumber());
+						stat1.setInt(1, (cart.get(i).getMovie().getQuantity() - cart.get(i).getNumber()));
+						stat1.setInt(2, cart.get(i).getMovie().getId());
+						
+						stat2.executeUpdate();
+						stat1.executeUpdate();
+					}
+					
+					stat.executeUpdate();
+
+				} finally {
+					// Close SQL connection.
+					stat.close();
+					stat1.close();
 				}
-				
-				stat.executeUpdate();
-
-			} finally {
-				// Close SQL connection.
-				stat.close();
-				stat1.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
 
-		emptyCart();
-		return "order_info";
+			emptyCart();
+			return "order_info";
+			
+		}
+		return "user_info";
+
 
 	}
 
@@ -185,10 +196,10 @@ public class Cart implements Serializable {
 	 * @param m
 	 */
 	public void AddToCart(Movie m) {
-	/*float totalPrice;
+		/*float totalPrice;
 		if (contains(m) == true) {
 			CartContents current = this.getIndexOfMovie(m);
-			if (current.getNumber() < current.getMovie().getQuantity()) {
+			if (current.getNumber() < current.getMovie().getQuantity())) {
 				current.setNumber(current.getNumber() + 1);
 				totalPrice = (this.getTotalPrice() - (current.getMovie().getPrice() * (current.getNumber() - 1))) + (current.getMovie().getPrice() * current.getNumber());
 				setTotalPrice(BigDecimal.valueOf(totalPrice).setScale(2,BigDecimal.ROUND_HALF_UP).floatValue());
@@ -199,7 +210,7 @@ public class Cart implements Serializable {
 			setTotalPrice(BigDecimal.valueOf(totalPrice).setScale(2,BigDecimal.ROUND_HALF_UP).floatValue());
 		}*/
 		
-	if (contains(m) == false) {
+		if (contains(m) == false) {
 			if (m.getQuantity() > 0) {
 				cart.add(new CartContents(m,1));
 				

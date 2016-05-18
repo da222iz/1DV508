@@ -32,18 +32,24 @@
 				rowClasses="characterTableOddRow,characterTableEvenRow">
 				<h:column>
 					<f:facet name="header">Order Number</f:facet>
-					#{ord.orderNumber}
+					<h:commandLink id="orderNumber" value="#{ord.orderNumber}" action="#{orderDB.goToOrderDetails(ord)}" />
+					
 				</h:column>
 			
 				<h:column>
 					<f:facet name="header">Name</f:facet>
 					#{ord.name}
 				</h:column>
+				
 				<h:column>
 					<f:facet name="header">Status</f:facet>
 				 <h:selectOneMenu id="menu" immediate="true" value="#{orderDB.allOrders.get(orderDB.indexOfOrder(ord)).status}">
 				 <f:selectItems value="#{orderDB.statusArray()}"/>
 		</h:selectOneMenu>
+				</h:column>
+				<h:column>
+					<f:facet name="header">Amount</f:facet>
+					#{ord.totalPrice}
 				</h:column>
 				<h:column>
 				<h:commandButton value="delete" action="#{orderDB.delete(ord)}" />
