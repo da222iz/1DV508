@@ -89,8 +89,12 @@
 		<div style="clear: both;">&nbsp;</div>
 	</div>
 	<!-- end #page --> 
+
 	
 		  <div class="table center" >
+		  <!-- browsing message --> 
+ <p style="font-size: 35px; text-align: center;">#{movieDB.displayMessage}</p>
+ 
         <h:panelGrid id="images" columns="4"  >
        	 	<ui:repeat value="#{movieDB.searchResult}" var="m">
        	 		<h:commandLink action="#{movieDB.displayMovieDetails(m)}">
