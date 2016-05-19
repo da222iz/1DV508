@@ -2,7 +2,9 @@ package resources;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,7 @@ public class Cart implements Serializable {
 	private MySQLConnection mysql = new MySQLConnection();
 	List<Movie> contents = new ArrayList<>();
 	List<CartContents> cart = new ArrayList<>();
+	
 	
 	public List<CartContents> getCart() {
 		return cart;
@@ -66,39 +69,31 @@ public class Cart implements Serializable {
 	public void setContents(List<Movie> contents) {
 		this.contents = contents;
 	}
+	
+	private boolean orderNumberExists(int n){
+		boolean exists=false;
+		List<Order> allOrders = new ArrayList<>();
 
-	public String placeOrder() {
-		
-		random= (int) Math.floor((Math.random() * 1000000000)+10000);
 		try {
-			PreparedStatement stat = mysql.conn().prepareStatement(
-					"INSERT INTO web_shopdb.orders ( status, name, address, zip, city, phone, email, order_number, total_price) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-			PreparedStatement stat1 = mysql.conn().prepareStatement("UPDATE web_shopdb.movies SET quantity = ? WHERE id = ?");
-			try {
+			Connection conn = mysql.conn();
 
-				stat.setString(1, "NEW");
-				stat.setString(2, temp.getName());
-				stat.setString(3, temp.getAddress());
-				stat.setInt(4, temp.getZip());
-				stat.setString(5, temp.getCityName());
-				stat.setInt(6, temp.getPhone());
-				stat.setString(7, temp.getEmail());
-				stat.setInt(8, random);
-				stat.setFloat(9, getTotalPrice());
-				
-				for (int i = 0; i < cart.size(); i++) {
-					stat1.setInt(1, (cart.get(i).getMovie().getQuantity() - cart.get(i).getNumber()));
-					stat1.setInt(2, cart.get(i).getMovie().getId());
+			try {
+				//	SQL query that retrieves all movies from database.
+				PreparedStatement stat = conn.prepareStatement("SELECT * FROM web_shopdb.orders");
+				stat.execute();
+				ResultSet rs = stat.getResultSet();
+				while (rs.next()) {
+					Order m = new Order();
+					m.setOrderNumber(rs.getInt(9));
+					m.setStatus(rs.getString(2));
+					m.setName(rs.getString(3));
+					allOrders.add(m);
 					
-					stat1.executeUpdate();
 				}
-				
-				stat.executeUpdate();
 
 			} finally {
-				// Close SQL connection.
-				stat.close();
-				stat1.close();
+				//	Close SQL connection.
+				conn.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -109,9 +104,75 @@ public class Cart implements Serializable {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
+		for (int i=0; i<allOrders.size(); i++){
+			if(allOrders.get(i).getOrderNumber()==n){
+				exists=true;
+				break;
+			}
+		}
+		return exists;
+		
+	}
 
-		emptyCart();
-		return "order_info";
+	public String placeOrder() {
+		if (cart.size()!=0){
+			do{
+				random = (int) Math.floor((Math.random() * 1000000000)+10000);
+			}while(this.orderNumberExists(random));
+			
+			//random = (int) System.nanoTime();
+			try {
+				Connection conn = mysql.conn();
+				
+
+				try {
+					PreparedStatement stat = conn.prepareStatement("INSERT INTO web_shopdb.orders ( status, name, address, zip, city, phone, email, order_number, total_price) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+					PreparedStatement stat1 = conn.prepareStatement("UPDATE web_shopdb.movies SET quantity = ? WHERE id = ?");
+					PreparedStatement stat2 = conn.prepareStatement("INSERT INTO web_shopdb.ordered_movies ( order_number, movie_title, quantity) VALUES ( ?, ?, ?)");
+
+					stat.setString(1, "NEW");
+					stat.setString(2, temp.getName());
+					stat.setString(3, temp.getAddress());
+					stat.setInt(4, temp.getZip());
+					stat.setString(5, temp.getCityName());
+					stat.setInt(6, temp.getPhone());
+					stat.setString(7, temp.getEmail());
+					stat.setInt(8, random);
+					stat.setFloat(9, getTotalPrice());
+					
+					for (int i = 0; i < cart.size(); i++) {
+						stat2.setInt(1, random);
+						stat2.setString(2, cart.get(i).getMovie().getTitle());
+						stat2.setInt(3, cart.get(i).getNumber());
+						stat1.setInt(1, (cart.get(i).getMovie().getQuantity() - cart.get(i).getNumber()));
+						stat1.setInt(2, cart.get(i).getMovie().getId());
+						
+						stat2.executeUpdate();
+						stat1.executeUpdate();
+					}
+					
+					stat.executeUpdate();
+
+				} finally {
+					// Close SQL connection.
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+
+			emptyCart();
+			return "order_info";
+			
+		}
+		return "user_info";
+
 
 	}
 
@@ -150,7 +211,7 @@ public class Cart implements Serializable {
 			cart.add(new CartContents(m,1));
 			totalPrice = this.getTotalPrice() + m.getPrice();
 			setTotalPrice(BigDecimal.valueOf(totalPrice).setScale(2,BigDecimal.ROUND_HALF_UP).floatValue());
-		}*/
+		}*/	
 		
 		if (contains(m) == false) {
 			if (m.getQuantity() > 0) {
@@ -158,7 +219,13 @@ public class Cart implements Serializable {
 				
 				float totalPrice = this.getTotalPrice() + m.getPrice();
 				setTotalPrice(BigDecimal.valueOf(totalPrice).setScale(2,BigDecimal.ROUND_HALF_UP).floatValue());
-			}	
+			}
+			else{
+				m.setAvailabilityMessage("Movie out of stock!");
+			}
+		}
+		else{
+			m.setAvailabilityMessage("Movie already in the Cart!");
 		}
 	}
 

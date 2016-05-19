@@ -8,15 +8,35 @@
 <h:head>
 
 
-<h:outputStylesheet library="css" name="userStyle.css" />
+<h:outputStylesheet library="css" name="myCart.css" />
 <title>Home</title>
+	<style> 
+	.Bimage{
+     background-image:url(/1DV508/resources/css/background.jpg);
+     background-size:100%;
+   
+ }
+	</style>
 </h:head>
-<h:body>
+<h:body class="Bimage">
 <h:form>
 
 
-<div id="nav">
-<ul>
+<div id="wrapper">
+	<div id="header-wrapper">
+		<div id="header" class="container">
+			<div id="logo">
+				<h1><a href="#">1DV508</a></h1>
+			</div>
+			
+			  <div id="v">
+			 <h:commandLink id="searchlink" value="Search" action="#{movieDB.displaySearchResults()}" />
+  <h:inputText  value="#{movieDB.searchInput}" style="border-radius: 30px 30px 30px 30px; height : 30px; width : 219px; float:left; position: relative;"/>
+			</div>
+			
+			
+			<div id="menu">
+			<ul>
   <li><a class="active" href="index.xhtml">Home</a></li>
   <li class="dropdown">
   <h:commandLink id="Movies" class="dropbtn" value="Movies" action="#{movieDB.displayAllMovies()}" />
@@ -32,18 +52,23 @@
          </h:dataTable>
         </div>
         </div>
-       
   </li>
-  <li><a href="#">Cart</a></li>
-  <li><h:commandLink id="searchlink" value="Search" action="#{movieDB.displaySearchResults()}" /></li>
-  <h:inputText value="#{movieDB.searchInput}" style=" height : 39px; width : 219px; float:left; position: relative;"/>
+  <li><a href="my_cart.xhtml">Cart</a></li>
+ 
   <li><h:commandLink action="#{orderDB.supportLink()}" value="Support" /></li>
 </ul>
- </div>
- 		
-        <div class="table center">
+			</div>
+		</div>
+	</div>
+	<!-- end #header -->
+	<div id="page">
+	
+			
+					  <div class="table center">
        <div class="table">
-			<h:dataTable value="#{cart.cart}" var="cartmovie">
+			<h:dataTable value="#{cart.cart}" var="cartmovie"   styleClass="users" border="1"
+				headerClass="userTableHeader"
+				rowClasses="characterTableOddRow,characterTableEvenRow">
 				<h:column>
 					<f:facet name="header">Movie Title</f:facet>
 					#{cartmovie.movie.title}
@@ -52,15 +77,28 @@
 					<f:facet name="header">Quantity</f:facet>
 					#{cartmovie.number}
 				</h:column>
-				<h:column>
-                    <f:facet name="header"></f:facet>
-                    <h:commandButton value="-" action="#{cart.decreaseQuantity(cartmovie)}" />
-                </h:column>
-				<h:column>
-                    <f:facet name="header"></f:facet>
-                    <h:commandButton value="+" action="#{cart.increaseQuantity(cartmovie)}" />
-                </h:column>
-				<h:column>
+				
+						<h:column>
+					<f:facet name="header"></f:facet>
+					<h:commandButton action="#{cart.decreaseQuantity(cartmovie)}" value="-" />
+				</h:column>
+				
+					<h:column>
+					<f:facet name="header"></f:facet>
+					<h:commandButton action="#{cart.increaseQuantity(cartmovie)}" value="+" />
+				</h:column>
+				
+			
+				
+				
+				
+				
+				
+				
+				
+				
+				<h:column>		
+				
 					<f:facet name="header">Unit Price</f:facet>
 					#{cartmovie.movie.price}
 				</h:column>
@@ -70,13 +108,32 @@
                 </h:column>
 
 			</h:dataTable>
-		</div>
+			</div>
 		<h3><b>Total price: </b> #{cart.totalPrice}</h3>
         </div>
         
          <h:commandButton value="Check Out" action="user_info" />
           <h:commandButton value="Continue Shopping" action="index" />
            <h:commandButton value="Empty Card" action="#{cart.emptyCart()}" />
+			
+			
+			
+			
+			
+		</div>
+        </div>
+					
+	
+	<!-- end #page --> 
+	
+		
+
+
+<div id="footer">
+	<p>&copy; Untitled. All rights reserved.Design by</p>
+</div>
+<!-- end #footer -->
+       
 </h:form>
 </h:body>
 </html>

@@ -6,40 +6,107 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html">
 <h:head>
-<h:outputStylesheet library="css" name="userStyle.css" />
+
+
+<h:outputStylesheet library="css" name="support.css" />
 <title>Home</title>
+	<style> 
+	.Bimage{
+     background-image:url(/1DV508/resources/css/background.jpg);
+     background-size:100%;
+   
+ }
+	</style>
 </h:head>
-<h:body>
-	<h:form id="support_form">
-		<div id="nav">
+<h:body class="Bimage">
+<h:form>
+
+
+<div id="wrapper">
+	<div id="header-wrapper">
+		<div id="header" class="container">
+			<div id="logo">
+				<h1><a href="#">1DV508</a></h1>
+			</div>
+			
+			  <div id="v">
+			 <h:commandLink id="searchlink" value="Search" action="#{movieDB.displaySearchResults()}" />
+  <h:inputText  value="#{movieDB.searchInput}" style="border-radius: 30px 30px 30px 30px; height : 30px; width : 219px; float:left; position: relative;"/>
+			</div>
+			
+			
+			<div id="menu">
 			<ul>
-	  			<li><a class="active" href="index.xhtml">Home</a></li>
-	  			<li class="dropdown">
-	  				<h:commandLink id="Movies" class="dropbtn" value="Movies" action="#{movieDB.displayAllMovies()}" />
-	    			<div class="dropdown-content">
-		            	<h:dataTable value="#{genreDB.genres}" var="genre" >              
-		       				<h:column>
-		       					<h:commandLink id="genrelink" value="#{genre.value}" action="#{movieDB.displayGenreMovies(genre)}" />
-		       				</h:column>
-						</h:dataTable>
-					</div>
-	 			</li>
-	  			<li><a href="my_cart.xhtml">Cart</a></li>
-	 			<li><h:commandLink id="searchlink" value="Search" action="#{movieDB.displaySearchResults()}" /></li>
-	  			<h:inputText value="#{movieDB.searchInput}" style=" height : 39px; width : 219px; float:left; position: relative;"/>
-	  			<li><h:commandLink action="#{orderDB.supportLink()}" value="Support" /></li>
-			</ul>
+  <li><a class="active" href="index.xhtml">Home</a></li>
+  <li class="dropdown">
+  <h:commandLink id="Movies" class="dropbtn" value="Movies" action="#{movieDB.displayAllMovies()}" />
+    <div class="dropdown-content">
+    
+           <div >
+            <h:dataTable value="#{genreDB.genres}" var="genre" >
+                         
+       				<h:column>
+       				<h:commandLink id="genrelink" value="#{genre.value}" action="#{movieDB.displayGenreMovies(genre)}" />
+                    </h:column>
+               
+         </h:dataTable>
+        </div>
+        </div>
+  </li>
+  <li><a href="my_cart.xhtml">Cart</a></li>
+ 
+  <li><h:commandLink action="#{orderDB.supportLink()}" value="Support" /></li>
+</ul>
+			</div>
 		</div>
-		<h3>Type your order number to check the status of your order</h3>
+	</div>
+	<!-- end #header -->
+	<div id="page">
+	
+			
+					  
+      	<h3>Type your order number to check the status of your order</h3>
 		<div>
-			<label>Order number:</label>
+			<label id="label">Order number</label>
 			<h:inputText id="order_number" value="#{orderDB.order_number}" />
 			<h:commandButton action="#{orderDB.search()}" value="Check order status" />
-		</div>
-		<div>
-			<label>Order status: </label>
+		<br /><br />
+			<label id="label">Order status </label>
 			<h:outputText value="#{orderDB.o.status}" />
+			<br />
+			<br />
+			<label id="label" >Total order price </label>
+			<h:outputText rendered="#{orderDB.statusExists(orderDB.o.status)}"
+			value="#{orderDB.o.totalPrice}" >
+			</h:outputText>
 		</div>
-	</h:form>
+		<br />
+		<div ><h:dataTable rendered="#{orderDB.statusExists(orderDB.o.status)}"
+		style="text-align: center;"
+		value="#{orderDB.getOrderMovies(orderDB.o.orderNumber)}" var="movie" styleClass="users"
+				headerClass="userTableHeader"
+				rowClasses="characterTableOddRow,characterTableEvenRow">
+				<h:column>
+					<f:facet name="header">Movie title</f:facet>
+					#{movie.title}
+				</h:column>
+				<h:column>
+					<f:facet name="header">Ordered Quantity</f:facet>
+					#{movie.quantity}
+				</h:column>
+			</h:dataTable>
+			</div>
+       
+					
+	</div>
+	<!-- end #page --> 
+	
+		
+
+</div>
+
+<!-- end #footer -->
+       
+</h:form>
 </h:body>
 </html>

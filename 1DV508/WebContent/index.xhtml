@@ -8,16 +8,36 @@
 <h:head>
 
 
-<h:outputStylesheet library="css" name="userStyle.css" />
+<h:outputStylesheet library="css" name="Home.css" />
 <title>Home</title>
+	<style> 
+	.Bimage{
+     background-image:url(/1DV508/resources/css/background.jpg);
+     background-size:100%;
+   
+ }
+	</style>
 </h:head>
-<h:body>
+<h:body class="Bimage">
 <h:form>
 
 
-<div id="nav">
-<ul>
-  <li><a class="active" href="index.xhtml">Home</a></li>
+<div id="wrapper">
+	<div id="header-wrapper">
+		<div id="header" class="container">
+			<div id="logo">
+				<h1><a href="#">1DV508</a></h1>
+			</div>
+			
+			  <div id="v">
+			 <h:commandLink id="searchlink" value="Search" action="#{movieDB.displaySearchResults()}" />
+  <h:inputText  value="#{movieDB.searchInput}" style="border-radius: 30px 30px 30px 30px; height : 30px; width : 219px; float:left; position: relative;"/>
+			</div>
+			
+			
+			<div id="menu">
+			<ul>
+  <li><h:commandLink id="Home" value="Home" action="#{movieDB.displayRandomMovies()}" /></li>
   <li class="dropdown">
   <h:commandLink id="Movies" class="dropbtn" value="Movies" action="#{movieDB.displayAllMovies()}" />
     <div class="dropdown-content">
@@ -34,21 +54,62 @@
         </div>
   </li>
   <li><a href="my_cart.xhtml">Cart</a></li>
-  <li><h:commandLink id="searchlink" value="Search" action="#{movieDB.displaySearchResults()}" /></li>
-  <h:inputText value="#{movieDB.searchInput}" style=" height : 39px; width : 219px; float:left; position: relative;"/>
-  <li><h:commandLink action="#{orderDB.supportLink()}" value="Support" /></li>
+ 
+ <li><h:commandLink action="#{orderDB.supportLink()}" value="Support" /></li>
 </ul>
- </div>
- 		
-        <div class="table center">
-        <h:panelGroup id="images">
+			</div>
+		</div>
+	</div>
+	<!-- end #header -->
+	<div id="page">
+		<div id="content">
+			<div class="post">
+				
+				<div class="entry">
+					
+				</div>
+			</div>
+		</div>
+		<!-- end #content -->
+		<div id="sidebar">
+			<ul>
+				<li>
+					<h2>Categories</h2>
+					<ul>
+						<li><a href="#">genre</a></li>
+						<li><a href="#">comedy</a></li>
+						<li><a href="#">Action</a></li>
+						<li><a href="#">Horror</a></li>
+						
+					</ul>
+				</li>
+			</ul>
+		</div>
+		<!-- end #sidebar -->
+		<div style="clear: both;">&nbsp;</div>
+	</div>
+	<!-- end #page --> 
+
+	
+		  <div class="table center" >
+		  <!-- browsing message --> 
+ <p style="font-size: 35px; text-align: center;">#{movieDB.displayMessage}</p>
+ 
+        <h:panelGrid id="images" columns="4"  >
        	 	<ui:repeat value="#{movieDB.searchResult}" var="m">
        	 		<h:commandLink action="#{movieDB.displayMovieDetails(m)}">
         						<h:graphicImage name="#{m.imgPath}" alt="#{m.title}"/>
 				</h:commandLink>
         	</ui:repeat>
-    	</h:panelGroup>
+    	</h:panelGrid>
         </div>
+
+</div>
+<div id="footer">
+	<p>&copy; Untitled. All rights reserved.Design by</p>
+</div>
+<!-- end #footer -->
+       
 </h:form>
 </h:body>
 </html>

@@ -32,8 +32,8 @@
 	<div class="center">
 title <h:inputText id="title" value="#{movieDB.temp.title}" />
 		<br />
-genre <h:selectOneMenu id="menu" immediate="true" value="#{movieDB.temp.genre}">
-		<f:selectItems value="#{genreDB.genresArray}" />
+genre <h:selectOneMenu id="menu" immediate="true" value="#{movieDB.temp.genreId}">
+		<f:selectItems value="#{genreDB.genres}" var="gen" itemValue="#{gen.id}" itemLabel="${gen.value}" />
 		</h:selectOneMenu><br/>
 description <h:inputText id="description" value="#{movieDB.temp.description}" />
 		<br />

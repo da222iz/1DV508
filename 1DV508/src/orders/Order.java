@@ -10,7 +10,8 @@ public class Order {
 	private String email;
 	private String status;
 	private int id;
-private int orderNumber;
+	private int orderNumber;
+	private float totalPrice;
 
 	public int getOrderNumber() {
 	return orderNumber;
@@ -65,6 +66,12 @@ public void setOrderNumber(int orderNumber) {
 	}
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	public float getTotalPrice() {
+		return totalPrice;
+	}
+	public void setTotalPrice(float totalPrice) {
+		this.totalPrice = totalPrice;
 	}
 	
 	

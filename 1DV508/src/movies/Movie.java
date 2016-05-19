@@ -1,14 +1,18 @@
 package movies;
 
+
 public class Movie {
 	
 	private int id;
 	private String title;
 	private String genre;
+	private int genreId;
 	private String description;
 	private String imgPath;
 	private int quantity;
 	private float price;
+	private String availabilityMessage="";
+	
 	
 	public int getId() {
 		return id;
@@ -52,6 +56,22 @@ public class Movie {
 	}
 	public void setGenre(String genre) {
 		this.genre = genre;
+
+	}
+	public int getGenreId()
+	{
+		return genreId;
+	}
+	
+	public void setGenreId(int id)
+	{
+		this.genreId = id;
+	}
+	public String getAvailabilityMessage() {
+		return availabilityMessage;
+	}
+	public void setAvailabilityMessage(String availabilityMessage) {
+		this.availabilityMessage = availabilityMessage;
 	}
 
 }

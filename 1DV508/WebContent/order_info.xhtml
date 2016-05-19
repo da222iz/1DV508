@@ -14,7 +14,7 @@
 
 		<div id="nav">
 			<ul>
-				<li><a class="active" href="index.xhtml">Home</a></li>
+				<li><h:commandLink id="Home" value="Home" action="#{movieDB.displayRandomMovies()}" /></li>
 				<li class="dropdown"><h:commandLink id="Movies" class="dropbtn"
 						value="Movies" action="#{movieDB.displayAllMovies()}" />
 					<div class="dropdown-content">
@@ -31,16 +31,17 @@
 						</div>
 					</div></li>
 				<li><a href="my_cart.xhtml">Cart</a></li>
-				<li><h:commandLink id="searchlink" value="Search"
-						action="#{movieDB.displaySearchResults()}" /></li>
+				
 				<h:inputText value="#{movieDB.searchInput}"
 					style=" height : 39px; width : 219px; float:left; position: relative;" />
+				<li><h:commandLink id="searchlink" value="Search"
+						action="#{movieDB.displaySearchResults()}" /></li>
 				<li><h:commandLink action="#{orderDB.supportLink()}" value="Support" /></li>
 			</ul>
 		</div>
 		<br />
 		<p style="font-size: 35px; text-align: center;">Your order number</p>
-		<p style="font-size: 72px; text-align: center;">#{cart.random}</p>
+		<p style="font-size: 72px; text-align: center;">#{orderDB.latestOrder.orderNumber}</p>
 	</h:form>
 </h:body>
 </html>

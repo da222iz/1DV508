@@ -1,7 +1,7 @@
 package users;
 
 import java.io.Serializable;
-
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,16 +30,18 @@ public class UserDB implements Serializable {
 	public String add(){
 		
 		try {
-			//	SQL query that adds a user to the database.
-			PreparedStatement stat = mysql.conn().prepareStatement("INSERT INTO users (Username, Password) VALUES (?, ?)");
+			Connection conn = mysql.conn();
+
 			try {
+				//	SQL query that adds a user to the database.
+				PreparedStatement stat = mysql.conn().prepareStatement("INSERT INTO users (Username, Password) VALUES (?, ?)");
 				stat.setString(1, temp.getUsername());
 				stat.setString(2, temp.getPassword());
 				stat.executeUpdate();
 				
 			} finally {
 				//	Close SQL connection.
-				stat.close();
+				conn.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -59,14 +61,17 @@ public class UserDB implements Serializable {
 		temp=x;
 		
 		try {
-			//	SQL query to delete a user from the database by id.
-			PreparedStatement stat = mysql.conn().prepareStatement("DELETE FROM users WHERE id = ?");
-			//	SQL query to modify columns in an existing table.
-			PreparedStatement stat1 = mysql.conn().prepareStatement("ALTER TABLE users AUTO_INCREMENT = ?");
+			Connection conn = mysql.conn();
+
+
 			try {
+				//	SQL query to delete a user from the database by id.
+				PreparedStatement stat = conn.prepareStatement("DELETE FROM users WHERE id = ?");
 				stat.setInt(1, temp.getId());
 				stat.executeUpdate();
 				
+				//	SQL query to modify columns in an existing table.
+				PreparedStatement stat1 = conn.prepareStatement("ALTER TABLE users AUTO_INCREMENT = ?");
 				List<User> result=getUsers();
 				int increment=result.get(result.size()-1).getId()+1;
 				stat1.setInt(1, increment);
@@ -74,8 +79,7 @@ public class UserDB implements Serializable {
 				
 			} finally {
 				//	Closes SQL connections.
-				stat.close();
-				stat1.close();
+				conn.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -98,17 +102,18 @@ public class UserDB implements Serializable {
 	
 	public String save(){
 		try {
-			//	SQL query that updates one user to the database by id.
-			PreparedStatement stat = mysql.conn().prepareStatement("UPDATE users SET Username = ?, Password = ? WHERE id = ?");
+			Connection conn = mysql.conn();
+
 			try {
-				stat.setString(1, temp.getUsername());
-				stat.setString(2, temp.getPassword());
-				stat.setInt(3, temp.getId());
+				//	SQL query that updates one user to the database by id.
+				PreparedStatement stat = conn.prepareStatement("UPDATE users SET Password = ? WHERE id = ?");
+				stat.setString(1, temp.getPassword());
+				stat.setInt(2, temp.getId());
 				stat.executeUpdate();
 				
 			} finally {
 				//	Close SQL connection.
-				stat.close();
+				conn.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -154,9 +159,11 @@ public class UserDB implements Serializable {
 		List<User> result = new ArrayList<>();
 
 		try {
-			//	SQL query that retrieves all users from database.
-			PreparedStatement stat = mysql.conn().prepareStatement("select * from web_shopdb.users");
+			Connection conn = mysql.conn();
+
 			try {
+				//	SQL query that retrieves all users from database.
+				PreparedStatement stat = conn.prepareStatement("select * from web_shopdb.users");
 				ResultSet rs = null;
 				stat.execute();
 				rs = stat.getResultSet();
@@ -171,7 +178,7 @@ public class UserDB implements Serializable {
 
 			} finally {
 				//	Close SQL connection.
-				stat.close();
+				conn.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
