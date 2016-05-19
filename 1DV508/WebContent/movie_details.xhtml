@@ -47,7 +47,7 @@
   </li>
 			<li><a href="my_cart.xhtml">Cart</a></li>
 
-			  <li><a href="#">Support</a></li>
+			  <li><h:commandLink action="#{orderDB.supportLink()}" value="Support" /></li>
 		</ul>
 	</div>
 </div>
@@ -60,30 +60,6 @@
 		
 		<h:graphicImage name="#{movieDB.temp.imgPath}" alt="#{movieDB.temp.title}"/>
 		
-			
-			<div>
-      	<h1>#{movieDB.temp.title}</h1>
-      
-        
-        <br /> <br />
-          <div>
-        Available Quantity #{movieDB.temp.quantity} 
-		</div>
-		<br />
-		
-		
-
-		
-       <button class="button yellow" onclick="#{cart.AddToCart(movieDB.temp)}" >
-       
-	<div class="title">Add to cart</div>
-	<div class="price">#{movieDB.temp.price}</div>
-</button>
-        
-        
-        
-        </div>
-
 		</div>
 		
 		
@@ -102,7 +78,21 @@
 					</li>
 					<li>
 						<h3>Other</h3>
-						<p>#{movieDB.temp.description}</p>
+							<div>
+        					<div>
+        					Available Quantity #{movieDB.temp.quantity} 
+							</div>
+							<br />
+		
+							<div>
+        					Unit price #{movieDB.temp.price} 
+							</div>
+							<br />
+							<h:commandButton action="#{cart.AddToCart(movieDB.temp)}" value="Add to cart" />
+							<br />
+							<br />
+							<h:outputText value="#{movieDB.temp.availabilityMessage}" />
+       						</div>
 					</li>
 				</ul>
 			</div>

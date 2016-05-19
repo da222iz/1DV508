@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -54,6 +55,7 @@ public class MovieDB implements Serializable{
 	
 	public String displayMovieDetails(Movie m){
 		temp=m;
+		temp.setAvailabilityMessage("");
 		return "movie_details";
 	}
 	public String displayAllMovies(){
@@ -113,10 +115,11 @@ public class MovieDB implements Serializable{
 		List<Movie> result = new ArrayList<>();
 		
 		try {
-			//	 database.
-			PreparedStatement stat = mysql.conn().prepareStatement(" SELECT * FROM web_shopdb.movies WHERE title LIKE ? OR description LIKE ? ");
+			Connection conn = mysql.conn();
 
 			try {
+				//	 search in movies using search option
+				PreparedStatement stat = conn.prepareStatement(" SELECT * FROM web_shopdb.movies WHERE title LIKE ? OR description LIKE ? ");
 				stat.setString(1, "%"+this.getSearchInput()+"%");
 				stat.setString(2, "%"+this.getSearchInput()+"%");
 				stat.execute();
@@ -135,7 +138,7 @@ public class MovieDB implements Serializable{
 
 			} finally {
 				//	Close SQL connection.
-				stat.close();
+				conn.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -154,10 +157,10 @@ public class MovieDB implements Serializable{
 		List<Movie> result = new ArrayList<>();
 
 		try {
-
-			PreparedStatement stat = mysql.conn().prepareStatement("select * from web_shopdb.movies order by rand() limit 5");
-
+			Connection conn = mysql.conn();
+			
 			try {
+				PreparedStatement stat = conn.prepareStatement("select * from web_shopdb.movies order by rand() limit 5");
 				stat.execute();
 				ResultSet rs = stat.getResultSet();
 				while (rs.next()) {
@@ -173,7 +176,7 @@ public class MovieDB implements Serializable{
 				}
 
 			} finally {
-				stat.close();
+				conn.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -192,10 +195,10 @@ public class MovieDB implements Serializable{
 		List<Movie> result = new ArrayList<>();
 
 		try {
-
-			PreparedStatement stat = mysql.conn().prepareStatement(" SELECT * FROM web_shopdb.productview WHERE genre = ? ");
-
+			Connection conn = mysql.conn();
+			
 			try {
+				PreparedStatement stat = conn.prepareStatement(" SELECT * FROM web_shopdb.productview WHERE genre = ? ");
 				stat.setString(1, genre.getValue());
 				stat.execute();
 				ResultSet rs = stat.getResultSet();
@@ -212,7 +215,7 @@ public class MovieDB implements Serializable{
 				}
 
 			} finally {
-				stat.close();
+				conn.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -231,10 +234,11 @@ public class MovieDB implements Serializable{
 		List<Movie> result = new ArrayList<>();
 
 		try {
-			//	SQL query that retrieves all movies from database.
-			PreparedStatement stat = mysql.conn().prepareStatement("SELECT * FROM web_shopdb.productview order by id");
-
+			Connection conn = mysql.conn();
+			
 			try {
+				//	SQL query that retrieves all movies from database.
+				PreparedStatement stat = conn.prepareStatement("SELECT * FROM web_shopdb.productview order by id");
 				stat.execute();
 				ResultSet rs = stat.getResultSet();
 				while (rs.next()) {
@@ -251,7 +255,7 @@ public class MovieDB implements Serializable{
 
 			} finally {
 				//	Close SQL connection.
-				stat.close();
+				conn.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -285,9 +289,12 @@ public class MovieDB implements Serializable{
 		}
 		
 		try {
-			//	SQL query that adds a movie to the database.
-			PreparedStatement stat = mysql.conn().prepareStatement("INSERT INTO web_shopdb.movies (title, genre, description, image_path, quantity, price) VALUES (?, ?, ?, ?, ?, ?)");
+			Connection conn = mysql.conn();
+
 			try {
+				//	SQL query that adds a movie to the database.
+				String query="INSERT INTO web_shopdb.movies (title, genre, description, image_path, quantity, price) VALUES (?, ?, ?, ?, ?, ?)";
+				PreparedStatement stat = conn.prepareStatement(query);
 				stat.setString(1, temp.getTitle());
 				stat.setInt(2, temp.getGenreId());
 				stat.setString(3, temp.getDescription());
@@ -298,7 +305,7 @@ public class MovieDB implements Serializable{
 
 			} finally {
 				//	Close SQL connection.
-				stat.close();
+				conn.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -324,10 +331,10 @@ public class MovieDB implements Serializable{
 		List<Movie> result = new ArrayList<>();
 
 		try {
-
-			PreparedStatement stat = mysql.conn().prepareStatement(" SELECT * FROM web_shopdb.movies WHERE image_path = ? ");
+			Connection conn = mysql.conn();
 
 			try {
+				PreparedStatement stat = conn.prepareStatement(" SELECT * FROM web_shopdb.movies WHERE image_path = ? ");
 				stat.setString(1, path);
 				stat.execute();
 				ResultSet rs = stat.getResultSet();
@@ -344,7 +351,7 @@ public class MovieDB implements Serializable{
 				}
 
 			} finally {
-				stat.close();
+				conn.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -377,9 +384,12 @@ public class MovieDB implements Serializable{
 		}
 	        
 		try {
-			//	SQL query that updates one movie to the database by id.
-			PreparedStatement stat = mysql.conn().prepareStatement("UPDATE web_shopdb.movies SET title = ?, genre = ?, description = ?, image_path = ?, quantity = ?, price = ?  WHERE id = ?");
+			Connection conn = mysql.conn();
+
 			try {
+				//	SQL query that updates one movie to the database by id.
+				String query="UPDATE web_shopdb.movies SET title = ?, genre = ?, description = ?, image_path = ?, quantity = ?, price = ?  WHERE id = ?";
+				PreparedStatement stat = conn.prepareStatement(query);
 				stat.setString(1, temp.getTitle());
 				stat.setInt(2, temp.getGenreId());
 				stat.setString(3, temp.getDescription());
@@ -391,7 +401,7 @@ public class MovieDB implements Serializable{
 				
 			} finally {
 				//	Close SQL connection.
-				stat.close();
+				conn.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -423,14 +433,16 @@ public class MovieDB implements Serializable{
 		}
 
 		try {
-			//	SQL query to delete a movie from the database by id.
-			PreparedStatement stat = mysql.conn().prepareStatement("DELETE FROM web_shopdb.movies WHERE id = ?");
-			//	SQL query to modify columns in an existing table.
-			PreparedStatement stat1 = mysql.conn().prepareStatement("ALTER TABLE web_shopdb.movies AUTO_INCREMENT = ?");
+			Connection conn = mysql.conn();
+
 			try {
+				//	SQL query to delete a movie from the database by id.
+				PreparedStatement stat = conn.prepareStatement("DELETE FROM web_shopdb.movies WHERE id = ?");
 				stat.setInt(1, temp.getId());
 				stat.executeUpdate();
 				
+				//	SQL query to modify columns in an existing table.
+				PreparedStatement stat1 = conn.prepareStatement("ALTER TABLE web_shopdb.movies AUTO_INCREMENT = ?");
 				List<Movie> result = getMovies();
 				int increment = result.get(result.size() - 1).getId() + 1;
 				stat1.setInt(1, increment);
@@ -438,8 +450,7 @@ public class MovieDB implements Serializable{
 
 			} finally {
 				//	Closes SQL connections.
-				stat.close();
-				stat1.close();
+				conn.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

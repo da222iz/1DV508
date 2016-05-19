@@ -2,6 +2,7 @@ package resources;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,6 +22,7 @@ public class Cart implements Serializable {
 	private MySQLConnection mysql = new MySQLConnection();
 	List<Movie> contents = new ArrayList<>();
 	List<CartContents> cart = new ArrayList<>();
+	
 	
 	public List<CartContents> getCart() {
 		return cart;
@@ -73,10 +75,11 @@ public class Cart implements Serializable {
 		List<Order> allOrders = new ArrayList<>();
 
 		try {
-			//	SQL query that retrieves all movies from database.
-			PreparedStatement stat = mysql.conn().prepareStatement("SELECT * FROM web_shopdb.orders");
+			Connection conn = mysql.conn();
 
 			try {
+				//	SQL query that retrieves all movies from database.
+				PreparedStatement stat = conn.prepareStatement("SELECT * FROM web_shopdb.orders");
 				stat.execute();
 				ResultSet rs = stat.getResultSet();
 				while (rs.next()) {
@@ -90,7 +93,7 @@ public class Cart implements Serializable {
 
 			} finally {
 				//	Close SQL connection.
-				stat.close();
+				conn.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -119,12 +122,13 @@ public class Cart implements Serializable {
 			
 			//random = (int) System.nanoTime();
 			try {
-				PreparedStatement stat = mysql.conn().prepareStatement(
-						"INSERT INTO web_shopdb.orders ( status, name, address, zip, city, phone, email, order_number, total_price) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-				PreparedStatement stat1 = mysql.conn().prepareStatement("UPDATE web_shopdb.movies SET quantity = ? WHERE id = ?");
-				PreparedStatement stat2 = mysql.conn().prepareStatement(
-						"INSERT INTO web_shopdb.ordered_movies ( order_number, movie_title, quantity) VALUES ( ?, ?, ?)");
+				Connection conn = mysql.conn();
+				
+
 				try {
+					PreparedStatement stat = conn.prepareStatement("INSERT INTO web_shopdb.orders ( status, name, address, zip, city, phone, email, order_number, total_price) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+					PreparedStatement stat1 = conn.prepareStatement("UPDATE web_shopdb.movies SET quantity = ? WHERE id = ?");
+					PreparedStatement stat2 = conn.prepareStatement("INSERT INTO web_shopdb.ordered_movies ( order_number, movie_title, quantity) VALUES ( ?, ?, ?)");
 
 					stat.setString(1, "NEW");
 					stat.setString(2, temp.getName());
@@ -151,8 +155,7 @@ public class Cart implements Serializable {
 
 				} finally {
 					// Close SQL connection.
-					stat.close();
-					stat1.close();
+					conn.close();
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -208,7 +211,7 @@ public class Cart implements Serializable {
 			cart.add(new CartContents(m,1));
 			totalPrice = this.getTotalPrice() + m.getPrice();
 			setTotalPrice(BigDecimal.valueOf(totalPrice).setScale(2,BigDecimal.ROUND_HALF_UP).floatValue());
-		}*/
+		}*/	
 		
 		if (contains(m) == false) {
 			if (m.getQuantity() > 0) {
@@ -216,7 +219,13 @@ public class Cart implements Serializable {
 				
 				float totalPrice = this.getTotalPrice() + m.getPrice();
 				setTotalPrice(BigDecimal.valueOf(totalPrice).setScale(2,BigDecimal.ROUND_HALF_UP).floatValue());
-			}	
+			}
+			else{
+				m.setAvailabilityMessage("Movie out of stock!");
+			}
+		}
+		else{
+			m.setAvailabilityMessage("Movie already in the Cart!");
 		}
 	}
 

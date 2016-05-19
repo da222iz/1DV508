@@ -11,6 +11,7 @@ public class Movie {
 	private String imgPath;
 	private int quantity;
 	private float price;
+	private String availabilityMessage="";
 	
 	
 	public int getId() {
@@ -65,6 +66,12 @@ public class Movie {
 	public void setGenreId(int id)
 	{
 		this.genreId = id;
+	}
+	public String getAvailabilityMessage() {
+		return availabilityMessage;
+	}
+	public void setAvailabilityMessage(String availabilityMessage) {
+		this.availabilityMessage = availabilityMessage;
 	}
 
 }

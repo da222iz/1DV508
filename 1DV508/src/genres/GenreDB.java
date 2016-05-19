@@ -40,11 +40,10 @@ public class GenreDB implements Serializable {
 		List<Genre> result = new ArrayList<>();
 
 		try {
-			//	SQL query that retrieves all genres from database.
 			Connection conn = mysql.conn();
 			
-
 			try {
+				//	SQL query that retrieves all genres from database.
 				PreparedStatement stat = conn.prepareStatement("SELECT * FROM web_shopdb.genres");
 				stat.execute();
 				ResultSet rs = stat.getResultSet();
@@ -94,15 +93,17 @@ public class GenreDB implements Serializable {
 	public String add() {
 
 		try {
-			//	SQL query that adds a genre to the database.
-			PreparedStatement stat = mysql.conn().prepareStatement("INSERT INTO web_shopdb.genres (genre) VALUES (?)");
+			Connection conn = mysql.conn();
+
 			try {
+				//	SQL query that adds a genre to the database.
+				PreparedStatement stat = conn.prepareStatement("INSERT INTO web_shopdb.genres (genre) VALUES (?)");
 				stat.setString(1, temp.getValue());
 				stat.executeUpdate();
 
 			} finally {
 				//	Close SQL connection.
-				stat.close();
+				conn.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -131,16 +132,18 @@ public class GenreDB implements Serializable {
 
 	public String save() {
 		try {
-			//	SQL query that updates one genre to the database by id.
-			PreparedStatement stat = mysql.conn().prepareStatement("UPDATE web_shopdb.genres SET genre = ? WHERE id = ?");
+			Connection conn = mysql.conn();
+
 			try {
+				//	SQL query that updates one genre to the database by id.
+				PreparedStatement stat = conn.prepareStatement("UPDATE web_shopdb.genres SET genre = ? WHERE id = ?");
 				stat.setString(1, temp.getValue());
 				stat.setInt(2, temp.getId());
 				stat.executeUpdate();
 
 			} finally {
 				//	Close SQL connection.
-				stat.close();
+				conn.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -159,11 +162,14 @@ public class GenreDB implements Serializable {
 		this.temp = genre;
 
 		try {
-			//	SQL query to delete a genre from the database by id.
-			PreparedStatement stat = mysql.conn().prepareStatement("DELETE FROM web_shopdb.genres WHERE id = ?");
-			//	SQL query to modify columns in an existing table.
-			PreparedStatement stat1 = mysql.conn().prepareStatement("ALTER TABLE web_shopdb.genres AUTO_INCREMENT = ?");
+			Connection conn = mysql.conn();
+
 			try {
+				
+				//	SQL query to delete a genre from the database by id.
+				PreparedStatement stat = conn.prepareStatement("DELETE FROM web_shopdb.genres WHERE id = ?");
+				//	SQL query to modify columns in an existing table.
+				PreparedStatement stat1 = conn.prepareStatement("ALTER TABLE web_shopdb.genres AUTO_INCREMENT = ?");
 				stat.setInt(1, temp.getId());
 				stat.executeUpdate();
 
@@ -174,8 +180,7 @@ public class GenreDB implements Serializable {
 
 			} finally {
 				//	Closes SQL connections.
-				stat.close();
-				stat1.close();
+				conn.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

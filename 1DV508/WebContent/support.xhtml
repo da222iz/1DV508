@@ -55,7 +55,7 @@
   </li>
   <li><a href="my_cart.xhtml">Cart</a></li>
  
-  <li><a href="#">Support</a></li>
+  <li><h:commandLink action="#{orderDB.supportLink()}" value="Support" /></li>
 </ul>
 			</div>
 		</div>
@@ -70,10 +70,32 @@
 			<label id="label">Order number</label>
 			<h:inputText id="order_number" value="#{orderDB.order_number}" />
 			<h:commandButton action="#{orderDB.search()}" value="Check order status" />
-		<br /><br /><br />
+		<br /><br />
 			<label id="label">Order status </label>
 			<h:outputText value="#{orderDB.o.status}" />
+			<br />
+			<br />
+			<label id="label" >Total order price </label>
+			<h:outputText rendered="#{orderDB.statusExists(orderDB.o.status)}"
+			value="#{orderDB.o.totalPrice}" >
+			</h:outputText>
 		</div>
+		<br />
+		<div ><h:dataTable rendered="#{orderDB.statusExists(orderDB.o.status)}"
+		style="text-align: center;"
+		value="#{orderDB.getOrderMovies(orderDB.o.orderNumber)}" var="movie" styleClass="users"
+				headerClass="userTableHeader"
+				rowClasses="characterTableOddRow,characterTableEvenRow">
+				<h:column>
+					<f:facet name="header">Movie title</f:facet>
+					#{movie.title}
+				</h:column>
+				<h:column>
+					<f:facet name="header">Ordered Quantity</f:facet>
+					#{movie.quantity}
+				</h:column>
+			</h:dataTable>
+			</div>
        
 					
 	</div>

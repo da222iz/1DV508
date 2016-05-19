@@ -52,7 +52,8 @@
 					#{ord.totalPrice}
 				</h:column>
 				<h:column>
-				<h:commandButton value="delete" action="#{orderDB.delete(ord)}" />
+				<h:commandButton rendered="#{ord.status.equals('SHIPPED')}"
+				value="delete" action="#{orderDB.delete(ord)}" />
 					
 				</h:column>
 				
