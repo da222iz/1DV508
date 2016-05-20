@@ -22,14 +22,12 @@
 <h:form>
 
 
-<div id="wrapper">
-	<div id="header-wrapper">
+
+	
 		<div id="header" class="container">
-			<div id="logo">
-				<h1><a href="#">1DV508</a></h1>
-			</div>
 			
-			  <div id="v">
+			
+			  <div id="vSearch">
 			 <h:commandLink id="searchlink" value="Search" action="#{movieDB.displaySearchResults()}" />
   <h:inputText  value="#{movieDB.searchInput}" style="border-radius: 30px 30px 30px 30px; height : 30px; width : 219px; float:left; position: relative;"/>
 			</div>
@@ -59,14 +57,15 @@
 </ul>
 			</div>
 		</div>
-	</div>
+	
 	<!-- end #header -->
+	<div id="wrapper" class="container">
 	<div id="page">
 	
 			
 					  <div class="table center">
        <div class="table">
-			<h:dataTable value="#{cart.cart}" var="cartmovie"   styleClass="users" border="1"
+			<h:dataTable value="#{cart.cart}" var="cartmovie"   styleClass="users" 
 				headerClass="userTableHeader"
 				rowClasses="characterTableOddRow,characterTableEvenRow">
 				<h:column>
@@ -80,12 +79,12 @@
 				
 						<h:column>
 					<f:facet name="header"></f:facet>
-					<h:commandButton action="#{cart.decreaseQuantity(cartmovie)}" value="-" />
+					<h:commandButton action="#{cart.decreaseQuantity(cartmovie)}" value="-" styleClass="bn2"/>
 				</h:column>
 				
 					<h:column>
 					<f:facet name="header"></f:facet>
-					<h:commandButton action="#{cart.increaseQuantity(cartmovie)}" value="+" />
+					<h:commandButton action="#{cart.increaseQuantity(cartmovie)}" value="+" styleClass="bn2"/>
 				</h:column>
 				
 			
@@ -104,25 +103,31 @@
 				</h:column>
 				<h:column>
                     <f:facet name="header">Delete</f:facet>
-                    <h:commandButton value="delete" action="#{cart.delete(cartmovie)}" />
+                    <h:commandButton value="delete" action="#{cart.delete(cartmovie)}" styleClass="bn2"/>
                 </h:column>
 
 			</h:dataTable>
 			</div>
 		<h3><b>Total price: </b> #{cart.totalPrice}</h3>
+		<br />
+		<div >
+		  <h:commandButton value="Check Out" action="user_info"/>
+		  	<span></span>
+          <h:commandButton value="Continue Shopping" action="index"/>
+          	<span></span>
+           <h:commandButton value="Empty Card" action="#{cart.emptyCart()}"/>
+		   </div>
         </div>
         
-         <h:commandButton value="Check Out" action="user_info" />
-          <h:commandButton value="Continue Shopping" action="index" />
-           <h:commandButton value="Empty Card" action="#{cart.emptyCart()}" />
+       
 			
 			
 			
 			
 			
 		</div>
-        </div>
-					
+      
+		</div>			
 	
 	<!-- end #page --> 
 	

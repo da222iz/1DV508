@@ -160,7 +160,7 @@ public class MovieDB implements Serializable{
 			Connection conn = mysql.conn();
 			
 			try {
-				PreparedStatement stat = conn.prepareStatement("select * from web_shopdb.movies order by rand() limit 5");
+				PreparedStatement stat = conn.prepareStatement("select * from web_shopdb.movies order by rand() limit 8");
 				stat.execute();
 				ResultSet rs = stat.getResultSet();
 				while (rs.next()) {
