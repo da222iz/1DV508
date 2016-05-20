@@ -22,14 +22,12 @@
 <h:form>
 
 
-<div id="wrapper">
-	<div id="header-wrapper">
+
+
 		<div id="header" class="container">
-			<div id="logo">
-				<h1><a href="#">1DV508</a></h1>
-			</div>
+		
 			
-			  <div id="v">
+			  <div id="vSearch">
 			 <h:commandLink id="searchlink" value="Search" action="#{movieDB.displaySearchResults()}" />
   <h:inputText  value="#{movieDB.searchInput}" style="border-radius: 30px 30px 30px 30px; height : 30px; width : 219px; float:left; position: relative;"/>
 			</div>
@@ -59,41 +57,12 @@
 </ul>
 			</div>
 		</div>
-	</div>
+	<div id="wrapper" class="container">
 	<!-- end #header -->
 	<div id="page">
-		<div id="content">
-			<div class="post">
-				
-				<div class="entry">
-					
-				</div>
-			</div>
-		</div>
-		<!-- end #content -->
-		<div id="sidebar">
-			<ul>
-				<li>
-					<h2>Categories</h2>
-					<ul>
-						<li><a href="#">genre</a></li>
-						<li><a href="#">comedy</a></li>
-						<li><a href="#">Action</a></li>
-						<li><a href="#">Horror</a></li>
-						
-					</ul>
-				</li>
-			</ul>
-		</div>
-		<!-- end #sidebar -->
-		<div style="clear: both;">&nbsp;</div>
-	</div>
-	<!-- end #page --> 
-
-	
-		  <div class="table center" >
+			  <div class="table center" >
 		  <!-- browsing message --> 
- <p style="font-size: 35px; text-align: center;">#{movieDB.displayMessage}</p>
+ <p style="font-size: 35px; text-align: center; line-height:0%;">#{movieDB.displayMessage}</p>
  
         <h:panelGrid id="images" columns="4"  >
        	 	<ui:repeat value="#{movieDB.searchResult}" var="m">
@@ -103,8 +72,18 @@
         	</ui:repeat>
     	</h:panelGrid>
         </div>
+		<!-- end #content -->
+	
+		<!-- end #sidebar -->
+		<div style="clear: both;">&nbsp;</div>
+	</div>
+	</div>
+	<!-- end #page --> 
 
-</div>
+	
+	
+
+
 <div id="footer">
 	<p>&copy; Untitled. All rights reserved.Design by</p>
 </div>
