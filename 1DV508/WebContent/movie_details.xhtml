@@ -69,7 +69,7 @@
 		
 		<div id="sidebar">
 			<div id="sbox1">
-				<h2>#{movieDB.temp.title}</h2>
+				<h2 style="color: black">#{movieDB.temp.title}</h2>
 				<ul class="list-style1">
 					
 					<li>
@@ -77,7 +77,7 @@
 						<p>#{movieDB.temp.description}</p>
 					</li>
 					<li>
-						<h3>Other</h3>
+						
 							<div>
         					<div>
         					Available Quantity #{movieDB.temp.quantity} 
@@ -88,10 +88,11 @@
         					Unit price #{movieDB.temp.price} 
 							</div>
 							<br />
-							<h:commandButton action="#{cart.AddToCart(movieDB.temp)}" value="Add to cart" />
-							<br />
-							<br />
-							<h:outputText value="#{movieDB.temp.availabilityMessage}" />
+						
+							<h:commandButton action="#{cart.AddToCart(movieDB.temp)}" value="Add to cart" styleClass="bn3" />
+							<span style=" width:100px;">   </span>
+							<h:outputText value="#{movieDB.temp.availabilityMessage}" style=" color:red;" />
+						
        						</div>
 					</li>
 				</ul>

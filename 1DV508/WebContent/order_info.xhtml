@@ -6,42 +6,62 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:h="http://xmlns.jcp.org/jsf/html">
 <h:head>
-	<h:outputStylesheet library="css" name="userStyle.css" />
+	<h:outputStylesheet library="css" name="Home.css" />
 	<title>order_info</title>
+	<title>Home</title>
+	<style> 
+	.Bimage{
+     background-image:url(/1DV508/resources/css/background.jpg);
+     background-size:100%;
+   
+ }
+	</style>
 </h:head>
-<h:body>
+<h:body class="Bimage">
 	<h:form>
 
-		<div id="nav">
+			<div id="header" class="container">
+		
+			
+			  <div id="vSearch">
+			 <h:commandLink id="searchlink" value="Search" action="#{movieDB.displaySearchResults()}" />
+  <h:inputText  value="#{movieDB.searchInput}" style="border-radius: 30px 30px 30px 30px; height : 30px; width : 219px; float:left; position: relative;"/>
+			</div>
+			
+			
+			<div id="menu">
 			<ul>
-				<li><h:commandLink id="Home" value="Home" action="#{movieDB.displayRandomMovies()}" /></li>
-				<li class="dropdown"><h:commandLink id="Movies" class="dropbtn"
-						value="Movies" action="#{movieDB.displayAllMovies()}" />
-					<div class="dropdown-content">
-
-						<div>
-							<h:dataTable value="#{genreDB.genres}" var="genre">
-
-								<h:column>
-									<h:commandLink id="genrelink" value="#{genre.value}"
-										action="#{movieDB.displayGenreMovies(genre)}" />
-								</h:column>
-
-							</h:dataTable>
-						</div>
-					</div></li>
-				<li><a href="my_cart.xhtml">Cart</a></li>
-				
-				<h:inputText value="#{movieDB.searchInput}"
-					style=" height : 39px; width : 219px; float:left; position: relative;" />
-				<li><h:commandLink id="searchlink" value="Search"
-						action="#{movieDB.displaySearchResults()}" /></li>
-				<li><h:commandLink action="#{orderDB.supportLink()}" value="Support" /></li>
-			</ul>
+  <li><h:commandLink id="Home" value="Home" action="#{movieDB.displayRandomMovies()}" /></li>
+  <li class="dropdown">
+  <h:commandLink id="Movies" class="dropbtn" value="Movies" action="#{movieDB.displayAllMovies()}" />
+    <div class="dropdown-content">
+    
+           <div >
+            <h:dataTable value="#{genreDB.genres}" var="genre" >
+                         
+       				<h:column>
+       				<h:commandLink id="genrelink" value="#{genre.value}" action="#{movieDB.displayGenreMovies(genre)}" />
+                    </h:column>
+               
+         </h:dataTable>
+        </div>
+        </div>
+  </li>
+  <li><a href="my_cart.xhtml">Cart</a></li>
+ 
+ <li><h:commandLink action="#{orderDB.supportLink()}" value="Support" /></li>
+</ul>
+			</div>
 		</div>
-		<br />
+		
+		<div id="wrapper" class="container">
+	<!-- end #header -->
+	<div id="page">
 		<p style="font-size: 35px; text-align: center;">Your order number</p>
 		<p style="font-size: 72px; text-align: center;">#{orderDB.latestOrder.orderNumber}</p>
+		
+		   </div>
+        </div>
 	</h:form>
 </h:body>
 </html>

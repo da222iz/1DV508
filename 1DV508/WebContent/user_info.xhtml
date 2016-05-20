@@ -8,16 +8,34 @@
 <h:head>
 
 
-<h:outputStylesheet library="css" name="userStyle.css" />
+<h:outputStylesheet library="css" name="UserInfo.css" />
 <title>User Information</title>
+	<style> 
+	.Bimage{
+     background-image:url(/1DV508/resources/css/background.jpg);
+     background-size:100%;
+   
+ }
+	</style>
+
+
 </h:head>
-<h:body>
+<h:body class="Bimage">
 <h:form>
 
 
-<div id="nav">
-<ul>
-  <li><h:commandLink id="Home" value="Home" action="#{movieDB.displayRandomMovies()}" /></li>
+	<div id="header" class="container">
+		
+			
+			  <div id="vSearch">
+			 <h:commandLink id="searchlink" value="Search" action="#{movieDB.displaySearchResults()}" />
+  <h:inputText  value="#{movieDB.searchInput}" style="border-radius: 30px 30px 30px 30px; height : 30px; width : 219px; float:left; position: relative;"/>
+			</div>
+			
+			
+			<div id="menu">
+			<ul>
+  <li><a class="active" href="index.xhtml">Home</a></li>
   <li class="dropdown">
   <h:commandLink id="Movies" class="dropbtn" value="Movies" action="#{movieDB.displayAllMovies()}" />
     <div class="dropdown-content">
@@ -32,15 +50,18 @@
          </h:dataTable>
         </div>
         </div>
-       
   </li>
   <li><a href="my_cart.xhtml">Cart</a></li>
-  
-  <h:inputText value="#{movieDB.searchInput}" style=" height : 39px; width : 219px; float:left; position: relative;"/>
-  <li><h:commandLink id="searchlink" value="Search" action="#{movieDB.displaySearchResults()}" /></li>
+ 
   <li><h:commandLink action="#{orderDB.supportLink()}" value="Support" /></li>
 </ul>
- </div>
+			</div>
+		</div>
+	
+ 		<div id="wrapper" class="container">
+ 		<div id="page">
+ 		
+ 		
  		
         <div class="table center">
        <div class="table">
@@ -67,27 +88,30 @@
         <div class="center">
 			User Information
 		</div>
-		
-	<div class="center">
-Name <h:inputText id="name"  required="true" value="#{cart.temp.name}" />*
 		<br />
-Address <h:inputText id="address" required="true" value="#{cart.temp.address}" />*
+	<div class="center"   >
+	<h:panelGrid>
+Name <h:inputText id="name"  required="true" value="#{cart.temp.name}"  />
+	<br />
+Address <h:inputText id="address" required="true" value="#{cart.temp.address}" />
 		<br />
-ZIP		 <h:inputText id="zip" required="true" value="#{cart.temp.zip}" />*
+ZIP		 <h:inputText id="zip" required="true" value="#{cart.temp.zip}" />
 		<br />
-City <h:inputText id="city" required="true" value="#{cart.temp.cityName}" />*
+City <h:inputText id="city" required="true" value="#{cart.temp.cityName}" />
 		<br />
-Phone number <h:inputText id="phone" required="true" value="#{cart.temp.phone}" />*
+Phone number <h:inputText id="phone" required="true" value="#{cart.temp.phone}" />
 		<br />
-Email <h:inputText id="email" required="true" value="#{cart.temp.email}" />*
+Email <h:inputText id="email" required="true" value="#{cart.temp.email}" />
+</h:panelGrid>
 		<br />
-
+<br />
 		<h:commandButton id="place" value="Place Order" action="#{cart.placeOrder()}" >
 
 </h:commandButton><br />
 
 		<br />
-		
+	</div> 	
+	</div> 
 </div>     
 </h:form>
 </h:body>

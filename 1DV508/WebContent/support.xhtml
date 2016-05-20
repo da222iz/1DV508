@@ -22,14 +22,12 @@
 <h:form>
 
 
-<div id="wrapper">
-	<div id="header-wrapper">
+
+
 		<div id="header" class="container">
-			<div id="logo">
-				<h1><a href="#">1DV508</a></h1>
-			</div>
+		
 			
-			  <div id="v">
+			  <div id="vSearch">
 			 <h:commandLink id="searchlink" value="Search" action="#{movieDB.displaySearchResults()}" />
   <h:inputText  value="#{movieDB.searchInput}" style="border-radius: 30px 30px 30px 30px; height : 30px; width : 219px; float:left; position: relative;"/>
 			</div>
@@ -59,23 +57,26 @@
 </ul>
 			</div>
 		</div>
-	</div>
+
 	<!-- end #header -->
+	<div id="wrapper" class="container">
 	<div id="page">
 	
 			
 					  
       	<h3>Type your order number to check the status of your order</h3>
+      	<br />
 		<div>
-			<label id="label">Order number</label>
+			<label id="label">Order number   </label>
+			<span></span>
 			<h:inputText id="order_number" value="#{orderDB.order_number}" />
 			<h:commandButton action="#{orderDB.search()}" value="Check order status" />
 		<br /><br />
-			<label id="label">Order status </label>
+			<label id="label">Order status :</label>
 			<h:outputText value="#{orderDB.o.status}" />
 			<br />
 			<br />
-			<label id="label" >Total order price </label>
+			<label id="label" >Total order price : </label>
 			<h:outputText rendered="#{orderDB.statusExists(orderDB.o.status)}"
 			value="#{orderDB.o.totalPrice}" >
 			</h:outputText>
@@ -97,13 +98,13 @@
 			</h:dataTable>
 			</div>
        
-					
+	</div>				
 	</div>
 	<!-- end #page --> 
 	
 		
 
-</div>
+
 
 <!-- end #footer -->
        
