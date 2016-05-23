@@ -219,6 +219,7 @@ public class Cart implements Serializable {
 				
 				float totalPrice = this.getTotalPrice() + m.getPrice();
 				setTotalPrice(BigDecimal.valueOf(totalPrice).setScale(2,BigDecimal.ROUND_HALF_UP).floatValue());
+				m.setAvailabilityMessage("Movie added to cart!");
 			}
 			else{
 				m.setAvailabilityMessage("Movie out of stock!");
