@@ -28,9 +28,7 @@ public class OrderDB implements Serializable {
 	private Order o = new Order();
 	private Order temp = new Order();
 	
-	public void getOrderDetails(Order order){
-		this.temp = order;
-	}
+
 
 	private List<Order> allOrders;
 
@@ -51,12 +49,10 @@ public class OrderDB implements Serializable {
 	public void setO(Order o) {
 		this.o = o;
 	}
-
-	public String goToOrderDetails(Order order) {
+	
+	public void getOrderDetails(Order order){
 		this.temp = order;
-		return "order_details";
 	}
-
 	public String[] statusArray() {
 		String[] status = new String[3];
 		status[0] = "NEW";
@@ -175,7 +171,7 @@ public class OrderDB implements Serializable {
 					m.setAddress(rs.getString(4));
 					m.setZip(rs.getInt(5));
 					m.setCityName(rs.getString(6));
-					m.setPhone(rs.getInt(7));
+					m.setPhone(rs.getLong(7));
 					m.setEmail(rs.getString(8));
 					m.setOrderNumber(rs.getInt(9));
 					m.setTotalPrice(rs.getFloat(10));
@@ -251,7 +247,7 @@ public class OrderDB implements Serializable {
 					m.setAddress(rs.getString(4));
 					m.setZip(rs.getInt(5));
 					m.setCityName(rs.getString(6));
-					m.setPhone(rs.getInt(7));
+					m.setPhone(rs.getLong(7));
 					m.setEmail(rs.getString(8));
 					m.setOrderNumber(rs.getInt(9));
 					m.setTotalPrice(rs.getFloat(10));

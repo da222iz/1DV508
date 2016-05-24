@@ -111,7 +111,7 @@
 		<h3><b>Total price: </b> #{cart.totalPrice}</h3>
 		<br />
 		<div >
-		  <h:commandButton value="Check Out" action="user_info"/>
+		  <h:commandButton value="Check Out" action="#{cart.checkout()}"/>
 		  	<span></span>
           <h:commandButton value="Continue Shopping" action="index"/>
           	<span></span>
