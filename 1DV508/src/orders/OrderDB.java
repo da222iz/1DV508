@@ -32,7 +32,7 @@ public class OrderDB implements Serializable {
 		this.temp = order;
 	}
 
-	private List<Order> allOrders = getOrder();
+	private List<Order> allOrders;
 
 	// Getters and setters for order number.
 	public String getOrder_number() {
@@ -68,6 +68,7 @@ public class OrderDB implements Serializable {
 	}
 
 	public int indexOfOrder(Order x) {
+		
 		int id = x.getOrderNumber();
 		int result = 0;
 		for (int i = 0; i < allOrders.size(); i++) {
@@ -271,6 +272,7 @@ public class OrderDB implements Serializable {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
+		this.setAllOrders(result);
 		return result;
 	}
 
