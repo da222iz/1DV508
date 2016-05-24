@@ -4,7 +4,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
       
 <h:head>
 	<h:outputStylesheet library="css" name="style.css" />
@@ -27,22 +28,23 @@
             Manage Genres
         </div>
         <div class="table">
-            <h:dataTable value="#{genreDB.genres}" var="g" styleClass="users" border="1"
-                         headerClass="userTableHeader"
-                         rowClasses="characterTableOddRow,characterTableEvenRow">
-                <h:column>
-                    <f:facet name="header">Genre</f:facet>
-                    #{g.value}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">edit</f:facet>
+		        <p:dataTable var="g" value="#{genreDB.genres}" rows="5"
+                         paginator="true"	
+                         paginatorPosition="bottom"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15">
+        <p:column headerText="Genre">
+            <h:outputText value="#{g.value}" />
+        </p:column>
+ 
+        <p:column headerText="edit">
                     <h:commandButton value="edit" action="#{genreDB.edit(g)}" />
-                </h:column>
-                <h:column>
-                    <f:facet name="header">delete</f:facet>
+		</p:column>
+ 
+        <p:column headerText="delete">
                     <h:commandButton value="delete" action="#{genreDB.delete(g)}" />
-                </h:column>
-            </h:dataTable>
+        </p:column>              
+    </p:dataTable>		        
         </div>
         <div class="center">
             <br />
