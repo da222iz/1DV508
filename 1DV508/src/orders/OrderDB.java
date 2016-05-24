@@ -27,6 +27,10 @@ public class OrderDB implements Serializable {
 
 	private Order o = new Order();
 	private Order temp = new Order();
+	
+	public void getOrderDetails(Order order){
+		this.temp = order;
+	}
 
 	private List<Order> allOrders = getOrder();
 
