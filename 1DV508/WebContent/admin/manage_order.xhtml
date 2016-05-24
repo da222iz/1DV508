@@ -27,7 +27,7 @@
 			Manage Orders
 		</div>
 		<div class="table">
-		        <p:dataTable var="ord" value="#{orderDB.order}" rows="5"
+		        <p:dataTable var="ord" value="#{orderDB.order}" rows="10"
                          paginator="true"	
                          paginatorPosition="bottom"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -70,7 +70,8 @@
         <p:column headerText="Status">
 				 <h:selectOneMenu id="menu" immediate="true" value="#{orderDB.allOrders.get(orderDB.indexOfOrder(ord)).status}">
 				 <f:selectItems value="#{orderDB.statusArray()}"/>
-		</h:selectOneMenu>        </p:column>
+		</h:selectOneMenu>        
+		</p:column>
  
         <p:column headerText="Amount">
             <h:outputText value="#{ord.totalPrice}" />
