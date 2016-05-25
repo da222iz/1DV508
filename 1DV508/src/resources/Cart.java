@@ -113,6 +113,12 @@ public class Cart implements Serializable {
 		return exists;
 		
 	}
+	public String checkout(){
+		if (cart.size()!=0)
+			return "user_info";
+		else
+			return "my_cart";
+	}
 
 	public String placeOrder() {
 		if (cart.size()!=0){
@@ -135,7 +141,7 @@ public class Cart implements Serializable {
 					stat.setString(3, temp.getAddress());
 					stat.setInt(4, temp.getZip());
 					stat.setString(5, temp.getCityName());
-					stat.setInt(6, temp.getPhone());
+					stat.setLong(6, temp.getPhone());
 					stat.setString(7, temp.getEmail());
 					stat.setInt(8, random);
 					stat.setFloat(9, getTotalPrice());
@@ -219,6 +225,7 @@ public class Cart implements Serializable {
 				
 				float totalPrice = this.getTotalPrice() + m.getPrice();
 				setTotalPrice(BigDecimal.valueOf(totalPrice).setScale(2,BigDecimal.ROUND_HALF_UP).floatValue());
+				m.setAvailabilityMessage("Movie added to cart!");
 			}
 			else{
 				m.setAvailabilityMessage("Movie out of stock!");

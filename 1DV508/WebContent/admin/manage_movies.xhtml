@@ -4,7 +4,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
       
 <h:head>
 	<h:outputStylesheet library="css" name="style.css" />
@@ -26,39 +27,39 @@
         <div class="center">
             Manage Movies
         </div>
+
+        
         <div class="table">
-            <h:dataTable value="#{movieDB.movies}" var="m" styleClass="users" border="1"
-                         headerClass="userTableHeader"
-                         rowClasses="characterTableOddRow,characterTableEvenRow">
-                <h:column>
-                    <f:facet name="header">ID</f:facet>
-                    #{m.id}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Title</f:facet>
-                    #{m.title}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Genre</f:facet>
-                    #{m.genre}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Quantity</f:facet>
-                    #{m.quantity}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Price</f:facet>
-                    #{m.price}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">edit</f:facet>
-                    <h:commandButton value="edit" action="#{movieDB.edit(m)}" />
-                </h:column>
-                <h:column>
-                    <f:facet name="header">delete</f:facet>
-                    <h:commandButton value="delete" action="#{movieDB.delete(m)}" />
-                </h:column>
-            </h:dataTable>
+        <p:dataTable var="m" value="#{movieDB.movies}" rows="10"
+                         paginator="true"	
+                         paginatorPosition="bottom"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15">
+        <p:column headerText="Id">
+            <h:outputText value="#{m.id}" />
+        </p:column>
+ 
+        <p:column headerText="Title" width="350">
+            <h:outputText value="#{m.title}" />
+        </p:column>
+ 
+        <p:column headerText="Genre" width="150">
+            <h:outputText value="#{m.genre}" />
+        </p:column>
+ 
+        <p:column headerText="Quantity">
+            <h:outputText value="#{m.quantity}" />
+        </p:column>
+        <p:column headerText="Price">
+            <h:outputText value="#{m.price}" />
+        </p:column>   
+        <p:column headerText="Edit">
+            <h:commandButton value="edit" action="#{movieDB.edit(m)}" />
+        </p:column>  
+        <p:column headerText="Delete">
+            <h:commandButton value="delete" action="#{movieDB.delete(m)}" />
+        </p:column>               
+    </p:dataTable>
         </div>
         <div class="center">
             <br />

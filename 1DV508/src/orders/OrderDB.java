@@ -27,8 +27,10 @@ public class OrderDB implements Serializable {
 
 	private Order o = new Order();
 	private Order temp = new Order();
+	
 
-	private List<Order> allOrders = getOrder();
+
+	private List<Order> allOrders;
 
 	// Getters and setters for order number.
 	public String getOrder_number() {
@@ -47,12 +49,10 @@ public class OrderDB implements Serializable {
 	public void setO(Order o) {
 		this.o = o;
 	}
-
-	public String goToOrderDetails(Order order) {
+	
+	public void getOrderDetails(Order order){
 		this.temp = order;
-		return "order_details";
 	}
-
 	public String[] statusArray() {
 		String[] status = new String[3];
 		status[0] = "NEW";
@@ -64,6 +64,7 @@ public class OrderDB implements Serializable {
 	}
 
 	public int indexOfOrder(Order x) {
+		
 		int id = x.getOrderNumber();
 		int result = 0;
 		for (int i = 0; i < allOrders.size(); i++) {
@@ -170,7 +171,7 @@ public class OrderDB implements Serializable {
 					m.setAddress(rs.getString(4));
 					m.setZip(rs.getInt(5));
 					m.setCityName(rs.getString(6));
-					m.setPhone(rs.getInt(7));
+					m.setPhone(rs.getLong(7));
 					m.setEmail(rs.getString(8));
 					m.setOrderNumber(rs.getInt(9));
 					m.setTotalPrice(rs.getFloat(10));
@@ -246,7 +247,7 @@ public class OrderDB implements Serializable {
 					m.setAddress(rs.getString(4));
 					m.setZip(rs.getInt(5));
 					m.setCityName(rs.getString(6));
-					m.setPhone(rs.getInt(7));
+					m.setPhone(rs.getLong(7));
 					m.setEmail(rs.getString(8));
 					m.setOrderNumber(rs.getInt(9));
 					m.setTotalPrice(rs.getFloat(10));
@@ -267,6 +268,7 @@ public class OrderDB implements Serializable {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
+		this.setAllOrders(result);
 		return result;
 	}
 

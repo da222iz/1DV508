@@ -6,7 +6,7 @@ public class Order {
 	private String address;
 	private int zip;
 	private String cityName;
-	private int phone;
+	private long phone;
 	private String email;
 	private String status;
 	private int id;
@@ -49,10 +49,10 @@ public void setOrderNumber(int orderNumber) {
 	public void setCityName(String cityName) {
 		this.cityName = cityName;
 	}
-	public int getPhone() {
+	public long getPhone() {
 		return phone;
 	}
-	public void setPhone(int phone) {
+	public void setPhone(long phone) {
 		this.phone = phone;
 	}
 	public String getEmail() {
