@@ -16,23 +16,19 @@
      background-size:100%;
    
  }
+ 
+ 
 	</style>
 </h:head>
 <h:body class="Bimage">
 <h:form>
 
-
-
-
-		<div id="header" class="container">
-		
-			
+		<div id="header" class="container">		
 			  <div id="vSearch">
 			 <h:commandLink id="searchlink" value="Search" action="#{movieDB.displaySearchResults()}" />
-  <h:inputText  value="#{movieDB.searchInput}" style="border-radius: 30px 30px 30px 30px; height : 30px; width : 219px; float:left; position: relative;"/>
+  <h:inputText  value="#{movieDB.searchInput}"  style="border-radius: 30px 30px 30px 30px; height : 30px; width : 219px; float:left; position: relative;"/>
 			</div>
-			
-			
+
 			<div id="menu">
 			<ul>
   <li><h:commandLink id="Home" value="Home" action="#{movieDB.displayRandomMovies()}" /></li>
@@ -51,7 +47,7 @@
         </div>
         </div>
   </li>
-  <li><a href="my_cart.xhtml">Cart</a></li>
+  <li><a class="badge1" data-badge="#{cart.cart.size()}" href="my_cart.xhtml">Cart</a></li>
  
  <li><h:commandLink action="#{orderDB.supportLink()}" value="Support" /></li>
 </ul>

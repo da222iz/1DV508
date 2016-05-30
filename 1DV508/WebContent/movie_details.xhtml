@@ -45,7 +45,7 @@
         </div>
         </div>
   </li>
-			<li><a href="my_cart.xhtml">Cart</a></li>
+			<li><a class="badge1" data-badge="#{cart.cart.size()}" href="my_cart.xhtml">Cart</a></li>
 
 			  <li><h:commandLink action="#{orderDB.supportLink()}" value="Support" /></li>
 		</ul>
@@ -89,7 +89,8 @@
 							</div>
 							<br />
 						
-							<h:commandButton action="#{cart.AddToCart(movieDB.temp)}" value="Add to cart" styleClass="bn3" />
+							<h:commandLink action="#{cart.AddToCart(movieDB.temp)}" value="Add to cart" styleClass="bn3" style="color:white" />
+							
 							<span style=" width:100px;">   </span>
 							<h:outputText value="#{movieDB.temp.availabilityMessage}" style=" color:red;" />
 						

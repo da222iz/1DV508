@@ -51,7 +51,7 @@
         </div>
         </div>
   </li>
-  <li><a href="my_cart.xhtml">Cart</a></li>
+  <li><a class="badge1" data-badge="#{cart.cart.size()}" href="my_cart.xhtml">Cart</a></li>
  
   <li><h:commandLink action="#{orderDB.supportLink()}" value="Support" /></li>
 </ul>
@@ -87,15 +87,7 @@
 					<h:commandButton action="#{cart.increaseQuantity(cartmovie)}" value="+" styleClass="bn2"/>
 				</h:column>
 				
-			
-				
-				
-				
-				
-				
-				
-				
-				
+	
 				<h:column>		
 				
 					<f:facet name="header">Unit Price</f:facet>
