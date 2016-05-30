@@ -4,7 +4,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
 <h:head>
 
 
@@ -51,7 +52,7 @@
         </div>
         </div>
   </li>
-  <li><a class="badge1" data-badge="#{cart.cart.size()}" href="my_cart.xhtml">Cart</a></li>
+  <li><a href="my_cart.xhtml">Cart</a></li>
  
   <li><h:commandLink action="#{orderDB.supportLink()}" value="Support" /></li>
 </ul>
@@ -90,17 +91,26 @@
 		</div>
 		<br />
 	<div class="center"   >
-Name <h:inputText id="name"  required="true" value="#{cart.temp.name}"  />
+Name <h:inputText id="name"  required="true" value="#{cart.temp.name}" requiredMessage="Please enter your name"  />
+		<p:message for="name" />
 	<br />
-Address <h:inputText id="address" required="true" value="#{cart.temp.address}" />
+Address <h:inputText id="address" required="true" value="#{cart.temp.address}" requiredMessage="Please enter your address" />
+		<p:message for="address" />
 		<br />
-ZIP		 <h:inputText id="zip" required="true" value="#{cart.temp.zip}" />
+ZIP		 <h:inputText id="zip" required="true" value="#{cart.temp.zip}" requiredMessage="Please enter your zip code" />
+		<p:message for="zip" />
 		<br />
-City <h:inputText id="city" required="true" value="#{cart.temp.cityName}" />
+City <h:inputText id="city" required="true" value="#{cart.temp.cityName}" requiredMessage="Please enter your city" />
+		<p:message for="city" />
 		<br />
-Phone number <h:inputText id="phone" required="true" value="#{cart.temp.phone}" />
+Phone number <h:inputText id="phone" required="true" value="#{cart.temp.phone}" requiredMessage="Please enter your phone number" />
+		<p:message for="phone" />
 		<br />
-Email <h:inputText id="email" required="true" value="#{cart.temp.email}" />
+		Email
+		<h:inputText id="email" value="#{cart.temp.email}" required="true" requiredMessage="Please enter your email" validatorMessage="The email is not valid">
+		    <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+		</h:inputText>
+		<p:message for="email" />
 		<br />
 <br />
 		<h:commandButton id="place" value="Place Order" action="#{cart.placeOrder()}" >
