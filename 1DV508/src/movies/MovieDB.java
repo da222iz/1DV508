@@ -240,7 +240,6 @@ public class MovieDB implements Serializable{
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		this.adminMovieList=result;
 		return result;
 		
 		
