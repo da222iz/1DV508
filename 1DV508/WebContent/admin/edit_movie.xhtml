@@ -28,25 +28,46 @@
 			Edit Movie : #{movieDB.temp.title}
 		</div>
 	
-	<div class="center">
-New title <h:inputText id="title" value="#{movieDB.temp.title}" />
-		<br />
-New genre <h:selectOneMenu id="menu" value="#{movieDB.temp.genreId}">
+	<div>
+	<table  border="5 solid black" style="width:40%" align="center">
+  <tr>
+    <td>New title</td>
+    <td><h:inputText id="title" value="#{movieDB.temp.title}" /></td>
+  </tr>
+  <tr>
+    <td>New genre</td>
+    <td><h:selectOneMenu id="menu" value="#{movieDB.temp.genreId}">
 		<f:selectItems value="#{genreDB.genres}" var="gen" itemValue="#{gen.id}" itemLabel="${gen.value}"/>
-		</h:selectOneMenu><br/>	
-New description <h:inputText id="description" value="#{movieDB.temp.description}" />
-		<br />	
-		<h:outputLabel for="fileImage" value="Upload Image:" />
+		</h:selectOneMenu><br/></td>
+  </tr>
+  <tr>
+    <td>New description</td>
+    <td><h:inputText id="description" value="#{movieDB.temp.description}" />
+		<br /></td>	
+		</tr>
+		<tr>
+		 <td>
+		<h:outputLabel for="fileImage" value="Upload Image:" /></td>
+		<td>
 		<p:fileUpload id="fileImage"  value="#{movieDB.image}" mode="simple" alt="" skinSimple="true" description="Image" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
-		<br />
-New quantity <h:inputText id="quantity" value="#{movieDB.temp.quantity}" />
-		<br />
-New price <h:inputText id="price" value="#{movieDB.temp.price}" />
-		<br />
-				
+		<br /></td>
+  </tr>
+  <tr>
+    <td>New quantity</td>
+    <td> <h:inputText id="quantity" value="#{movieDB.temp.quantity}" />
+		<br /></td>
+  </tr>
+  <tr>
+    <td>New price</td>
+    <td><h:inputText id="price" value="#{movieDB.temp.price}" />
+		<br /></td>
+  </tr>
+</table>
+			<div class="center">	
 		<h:commandButton value="save" ajax="false" action="#{movieDB.save()}" />
 		<br />
 		<br />
+		</div>
 </div>
 
 	</h:form>
