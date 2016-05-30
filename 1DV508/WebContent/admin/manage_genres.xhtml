@@ -16,7 +16,7 @@
         <div class="menue">
             <ul id="menu" >
                 <li><a class="active" href="admin_home.xhtml">Home</a></li>
-				<li><a class="active" href="manage_movies.xhtml">Products</a></li>
+				<li><h:commandLink value="Products" action="#{movieDB.manageProducts()}" /></li>
 				<li><a class="active" href="manage_order.xhtml">Orders</a></li>
 				<li><a class="active" href="manage_accounts.xhtml">Accounts</a></li>
 				<li><a class="active" href="manage_genres.xhtml">Categories</a></li>
@@ -32,10 +32,14 @@
                          paginator="true"	
                          paginatorPosition="bottom"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         rowsPerPageTemplate="5,10,15">
+                         rowsPerPageTemplate="10,20,100">
         <p:column headerText="Genre">
             <h:outputText value="#{g.value}" />
         </p:column>
+        
+        <p:column headerText="Movies per Genre">
+        	<h:commandLink value="#{movieDB.getGenreMovies(g).size()}" action="#{movieDB.manageGenreMovies(g)}" />
+        </p:column>        
  
         <p:column headerText="edit">
                     <h:commandButton value="edit" action="#{genreDB.edit(g)}" />

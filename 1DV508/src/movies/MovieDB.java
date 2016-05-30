@@ -34,6 +34,7 @@ public class MovieDB implements Serializable{
 	private String searchInput="";
 	private List<Movie> searchResult = this.getRandomMovies();
 	private String displayMessage="Welcome to MyMovieWepShop!";
+	private List<Movie> adminMovieList = this.getMovies();
 	
 	// Getters and Setters for Movie
 	public Movie getTemp() {
@@ -92,6 +93,19 @@ public class MovieDB implements Serializable{
 		}
 		
 		return "index";
+	}
+	public String manageGenreMovies(Genre thegenre){
+		
+		this.adminMovieList = this.getGenreMovies(thegenre);
+		
+		return "manage_movies";
+	}
+	
+	public String manageProducts(){
+		
+		this.adminMovieList = this.getMovies();
+		
+		return "manage_movies";
 	}
 	public String displaySearchResults(){
 		
@@ -226,7 +240,9 @@ public class MovieDB implements Serializable{
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
+		this.adminMovieList=result;
 		return result;
+		
 		
 	}
 	
@@ -317,7 +333,7 @@ public class MovieDB implements Serializable{
 			e.printStackTrace();
 		}
 
-		return "manage_movies";
+		return manageProducts();
 	}
 	
 	
@@ -413,7 +429,7 @@ public class MovieDB implements Serializable{
 			e.printStackTrace();
 		}
 		
-		return "manage_movies";
+		return manageProducts();
 		
 	}
 	
@@ -462,7 +478,7 @@ public class MovieDB implements Serializable{
 			e.printStackTrace();
 		}
 
-		return "manage_movies";
+		return manageProducts();
 	}
 	
 	public String getSearchInput() {
@@ -508,6 +524,12 @@ public class MovieDB implements Serializable{
 	}
 	public void setDisplayMessage(String displayMessage) {
 		this.displayMessage = displayMessage;
+	}
+	public List<Movie> getAdminMovieList() {
+		return adminMovieList;
+	}
+	public void setAdminMovieList(List<Movie> adminMovieList) {
+		this.adminMovieList = adminMovieList;
 	}	
 	
 }

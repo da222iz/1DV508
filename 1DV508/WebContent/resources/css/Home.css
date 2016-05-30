@@ -5,12 +5,6 @@ body{
 	padding:none;
 
 }
-span {
-  position:absolute;
-  width: 100px;
-  display: block;
-}
-
 
 h1, h2, h3
 {
@@ -118,7 +112,9 @@ hr
 	
 }
 
-
+.ui-datagrid-content {
+   border: none;
+} 
 
 
 
