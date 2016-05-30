@@ -28,18 +28,16 @@
 			Add Movie
 		</div>
 		<p:messages showDetail="true"/>
-	<table  border="5 solid black" style="width:40%">
+	<table  border="5 solid black" style="width:40%" align="center">
   <tr>
     <td>Title</td>
     <td><h:inputText id="title" value="#{movieDB.temp.title}" /></td>
   </tr>
-  
   <tr>
     <td>Genre</td>
     <td><h:selectOneMenu id="menu" immediate="true" value="#{movieDB.temp.genreId}">
 		<f:selectItems value="#{genreDB.genres}" var="gen" itemValue="#{gen.id}" itemLabel="${gen.value}" />
 		</h:selectOneMenu><br/></td>
-  
   </tr>
   <tr>
     <td>Description</td>
@@ -52,20 +50,16 @@
 		<td>
 		<p:fileUpload id="fileImage"  value="#{movieDB.image}" style="font-size:0.7em" mode="simple" skinSimple="true" description="Image" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
 		<br /></td>
-    
   </tr>
   <tr>
     <td>Quantity</td>
     <td> <h:inputText id="quantity" value="#{movieDB.temp.quantity}" />
 		<br /></td>
-   
   </tr>
-  
   <tr>
     <td>Price</td>
     <td><h:inputText id="price" value="#{movieDB.temp.price}" />
 		<br /></td>
-    
   </tr>
 </table>	
 	<div class="center">
