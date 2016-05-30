@@ -13,14 +13,14 @@
 
 	<h:form>
 		<div class="menue">
-		<ul id="menu" >
-			<li><a class="active" href="admin_home.xhtml">Home</a></li>
-			<li><a class="active" href="manage_movies.xhtml">PRODUCTS</a></li>
-			<li><a class="active" href="manage_order.xhtml">ORDERS</a></li>
-			<li><a class="active" href="manage_accounts.xhtml">ACCOUNTS</a></li>
-			<li><a class="active" href="manage_genres.xhtml">CATEGORIES</a></li>
-			<li><a class="active" href="login.xhtml">LOGOUT</a></li>
-		</ul>
+            <ul id="menu" >
+                <li><a class="active" href="admin_home.xhtml">Home</a></li>
+				<li><h:commandLink value="Products" action="#{movieDB.manageProducts()}" /></li>
+				<li><a class="active" href="manage_order.xhtml">Orders</a></li>
+				<li><a class="active" href="manage_accounts.xhtml">Accounts</a></li>
+				<li><a class="active" href="manage_genres.xhtml">Categories</a></li>
+				<h:commandButton value="Logout" action="#{userDB.logout()}"/>
+            </ul>
 		</div>
 		<div class="center">
 			Add Account
