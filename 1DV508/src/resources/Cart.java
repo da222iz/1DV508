@@ -115,9 +115,9 @@ public class Cart implements Serializable {
 	}
 	public String checkout(){
 		if (cart.size()!=0)
-			return "user_info";
+			return "user_info.xhtml";
 		else
-			return "my_cart";
+			return "my_cart.xhtml";
 	}
 
 	public String placeOrder() {

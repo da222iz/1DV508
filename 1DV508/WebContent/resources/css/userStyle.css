@@ -104,3 +104,23 @@ body  {
 
 #nav li a:hover {
 	background-color: maroon; }
+	
+	.badge1 {
+		position:relative;
+	}
+	.badge1[data-badge]:after {
+		content:attr(data-badge);
+		
+		top:5px;
+		right:60px;
+		font-size:1.5em;
+		position: absolute;
+		color:red;
+		width:18px;
+		height:18px;
+		text-align:center;
+		line-height:18px;
+		font-weight: bolder;
+		
+		
+	}
